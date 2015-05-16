@@ -1,5 +1,10 @@
 var React = require('react'),
+  async = require('async'),
   _ = require('underscore');
+
+var queue = async.queue(function (task, callback) {
+  task(callback);
+}, 1);
 
 var opts = [
   {
@@ -193,8 +198,9 @@ var FuncExample = React.createClass({
     console.info('data', data);
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
-      var chrome = row.indexOf('eval at onRunButtonClicked') > -1;
-      if (chrome) {
+      var chrome = row.indexOf('eval at <anonymous>') > -1;
+      var firefox = row.indexOf('code') > -1 && row.indexOf('eval') > -1;
+      if (chrome || firefox) {
         var split = row.split(':');
         return parseInt(split[split.length - 2]);
       }
@@ -206,34 +212,39 @@ var FuncExample = React.createClass({
     }
   },
   onRunButtonClicked: function () {
-    var oldConsoleLog = window.console.log;
-    var logs = [];
-    var numberedLogs = {};
-    var code = this.props.example.code;
-    window.console.log = function customLog() {
-      var args = [];
-      for (var i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
-      }
-      logs.push(args);
-      var n = this.getLineNumber();
-      if (n) {
-        if (!numberedLogs[n]) {
-          numberedLogs[n] = [];
+    queue.push(function (done) {
+      var logs = [];
+      var numberedLogs = {};
+      var oldConsoleLog = window.console.log;
+      var code = this.props.example.code;
+      window.console.log = function customLog() {
+        var args = [];
+        for (var i = 0; i < arguments.length; i++) {
+          args.push(arguments[i]);
         }
-        numberedLogs[n].push(args);
-      }
-    }.bind(this);
-    var fn;
-    eval('fn = ' + code);
-    //noinspection JSUnusedAssignment
-    fn(function () {
-      window.console.log = oldConsoleLog;
-      this.setState({
-        logs: logs,
-        numberedLogs: numberedLogs
-      });
+        logs.push(args);
+        var n = this.getLineNumber();
+        if (n) {
+          if (!numberedLogs[n]) {
+            numberedLogs[n] = [];
+          }
+          numberedLogs[n].push(args);
+        }
+      }.bind(this);
+      var fn;
+      eval('fn = ' + code);
+      //noinspection JSUnusedAssignment
+      fn(function () {
+        window.console.log = oldConsoleLog;
+        console.log(1111, logs, numberedLogs);
+        this.setState({
+          logs: logs,
+          numberedLogs: numberedLogs
+        });
+        done();
+      }.bind(this));
     }.bind(this));
+
   },
   render: function () {
     var example = this.props.example,
