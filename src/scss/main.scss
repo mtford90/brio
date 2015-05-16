@@ -1,3 +1,31 @@
-body {
-  //background-color: purple;
+
+.func {
+  .func-examples {
+    .func-example {
+      .code {
+        .log {
+          text-decoration: none;
+          background-color: #fff7cd;
+          &:hover {
+            background-color: #fff5a7;
+          }
+        }
+      }
+    }
+  }
+}
+
+.my-custom-theme {
+  border-radius: 5px;
+  border: none;
+  background: #4c4c4c;
+  color: #fff;
+}
+
+/* Use this next selector to style things like font-size and line-height: */
+.my-custom-theme .tooltipster-content {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 8px 10px;
 }

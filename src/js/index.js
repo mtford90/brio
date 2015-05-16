@@ -27,7 +27,10 @@ var opts = [
         name: 'Specifying fields',
         code: function () {
           var x = 1 + 3;
-          var n = 5; console.log(x); var m = 8;
+          var n = 5;
+          console.log(x);
+          var m = 8;
+          console.log(x);
           console.log(x + 5);
         }
       }
@@ -104,6 +107,27 @@ var FuncDef = React.createClass({
   }
 });
 
+
+var FuncLog = React.createClass({
+  render: function () {
+    return (
+      <a href="#"
+         ref="hyperlink"
+         className="log"
+         title={this.props.val}>
+        {this.props.children}
+      </a>
+    );
+  },
+  componentDidMount: function () {
+    var $hyperlink = $(this.refs['hyperlink'].getDOMNode());
+    $hyperlink.tooltipster({
+      theme: 'my-custom-theme',
+      position: 'top-right'
+    });
+  }
+});
+
 var FuncExample = React.createClass({
   componentDidMount: function () {
     this.onRunButtonClicked();
@@ -117,51 +141,65 @@ var FuncExample = React.createClass({
   },
   parseCode: function (code) {
     var raw = code.toString(),
-      split = raw.split('\n'),
+      split = raw.replace(new RegExp('\t|      ', 'g'), '').split('\n'),
       numberedLogs = this.state.numberedLogs;
 
     var parsed;
+
+    var elements = [];
+
     if (split.length) {
       for (var i = 0; i < split.length; i++) {
         var lineNum = i + 1;
-        if (numberedLogs[lineNum]) {
+        var logs = numberedLogs[lineNum];
 
+        if (logs) {
           var line = split[i];
-          var re = /console.log\([A-Za-z0-9 +-]*\)/;
-          var subs = re.exec(line);
-          if (subs.length) {
-            var cursor = subs.index;
-            var sub = subs[0];
-            console.log('line', line);
-            console.log('subs', subs);
-            console.log('cursor', cursor);
-            console.log('sub', sub);
-            var pre = line.slice(0, cursor);
-            var inner = line.slice(cursor, cursor + sub.length);
-            var post = line.slice(cursor + sub.length, line.length);
-            split[i] = pre + '<a href="#">' + inner + '</a>' + post;
+          var re = /console.log\([A-Za-z0-9 +-]*\)/g;
+          var numSubs = logs.length;
+          if (numSubs) {
+            var l = [];
+            var match;
+            while ((match = re.exec(line)) != null) {
+              l.push([match.index, match.index + match[0].length]);
+            }
+            var newLine = "";
+            var cursor = 0;
+            var lineElements = [];
+            for (var j = 0; j < l.length; j++) {
+              var range = l[j];
+              var pre = line.slice(cursor, range[0]);
+              var inner = '<a href="#" class="log" data-val="' + logs[j] + '">' + line.slice(range[0], range[1]) + '</a>';
+              newLine += pre;
+              lineElements.push(<span>{pre}</span>);
+              lineElements.push(<FuncLog val={logs[j]}>{line.slice(range[0], range[1])}</FuncLog>);
+              newLine += inner;
+              cursor = range[1];
+            }
+            split[i] = newLine;
+            elements.push(
+              <div className="line">
+                {lineElements}
+              </div>
+            );
           }
           else {
-            split[i] = '<a href="#">' + split[i] + '</a>'
+            split[i] = '<a href="#">' + split[i] + '</a>';
+            elements.push(<a href="#">{split[i]}</a>);
           }
         }
+        else {
+          elements.push(<div className="line">{split[i]}</div>)
+        }
       }
+      return elements.slice(1, elements.length - 1);
+    }
 
-      parsed =
-        split
-          .splice(1, split.length - 2)
-          .join('<br/>')
-          .replace(new RegExp('\t|      ', 'g'), '');
-    }
-    else {
-      parsed = raw;
-    }
-    return parsed;
+    return elements;
   },
   /**
    * HACK: This is a disgusting, filthy hack to get hold of the line number in the code
-   * block from which the console.log originated. This allows us to then patch in a hyperlink the
-   * result of the console.log so that when we hover over we can see the result.
+   * block from which the console.log originated. This allows us to then patch tooltips
    *
    * Note: This only works in certain browsers. If we detect a failure to get hold of the line number
    * we fall back to display sequential log display, much like javascript dev console.
@@ -196,7 +234,10 @@ var FuncExample = React.createClass({
       logs.push(args);
       var n = this.getLineNumber();
       if (n) {
-        numberedLogs[n] = args;
+        if (!numberedLogs[n]) {
+          numberedLogs[n] = [];
+        }
+        numberedLogs[n].push(args);
       }
     }.bind(this);
     var fn;
@@ -231,8 +272,9 @@ var FuncExample = React.createClass({
           </button>
         </div>
 
-        <div className="code" dangerouslySetInnerHTML={{__html: parsedCode}}>
-        </div>
+        <pre className="code">
+          {parsedCode}
+        </pre>
 
         <div className="logs">
           <pre>{this.state.logs.map(function (l) {

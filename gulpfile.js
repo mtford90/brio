@@ -46,8 +46,19 @@ gulp.task('build:js', function () {
     .pipe(gulp.dest('build'))
 });
 
-gulp.task('build:vendor', function () {
-  var vendorFiles = JSON.parse(fs.readFileSync('src/vendor.config.json', 'utf8'));
+gulp.task('build:vendor', ['build:vendor:js', 'build:vendor:css']);
+
+gulp.task('build:vendor:css', function () {
+  var vendorFiles = JSON.parse(fs.readFileSync('src/vendor.config.json', 'utf8'))['css'];
+  return gulp.src(vendorFiles)
+    //.pipe(plugins.sourcemaps.init())
+    .pipe(plugins.concat('vendor.css'))
+    //.pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest('build'))
+});
+
+gulp.task('build:vendor:js', function () {
+  var vendorFiles = JSON.parse(fs.readFileSync('src/vendor.config.json', 'utf8'))['js'];
   return gulp.src(vendorFiles)
     //.pipe(plugins.sourcemaps.init())
     .pipe(plugins.concat('vendor.js'))
