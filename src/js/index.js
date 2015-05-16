@@ -25,36 +25,24 @@ var opts = [
     examples: [
       {
         name: 'Specifying fields',
-        code: function () {
-          var x = 1 + 3;
-          var n = 5;
-          console.log(x);
-          var m = 8;
-          console.log(x);
-          console.log(x + 5);
+        code: function (done) {
+          var MyCollection = siesta.collection('MyCollection'),
+            MyModel = MyCollection.model('MyModel', {
+              attributes: ['field1', 'field2']
+            });
+
+          MyModel.graph({
+            field1: 1,
+            field2: 2
+          }).then(function (instance) {
+            console.log(instance);
+            done();
+          });
         }
       }
     ]
   }
 ];
-
-
-//var MyCollection = siesta.collection('MyCollection'),
-//  MyModel = MyCollection.model('MyModel', {
-//    attributes: ['field1', 'field2']
-//  });
-//
-//var s = siesta.serialiser(MyModel, {
-//  fields: ['field1']
-//});
-//
-//MyModel.graph({
-//  field1: 1,
-//  field2: 2
-//}, function (instance) {
-//  var serialised = s.serialise(instance);
-//  console.log(serialised);
-//});
 
 
 var FuncParam = React.createClass({
@@ -107,7 +95,6 @@ var FuncDef = React.createClass({
   }
 });
 
-
 var FuncLog = React.createClass({
   render: function () {
     return (
@@ -141,10 +128,11 @@ var FuncExample = React.createClass({
   },
   parseCode: function (code) {
     var raw = code.toString(),
-      split = raw.replace(new RegExp('\t|      ', 'g'), '').split('\n'),
+      split = raw
+        .replace(new RegExp('\t|      ', 'g'), '')
+        .replace(/done\(\)( *);?\n?/g, '')
+        .split('\n'),
       numberedLogs = this.state.numberedLogs;
-
-    var parsed;
 
     var elements = [];
 
@@ -155,7 +143,7 @@ var FuncExample = React.createClass({
 
         if (logs) {
           var line = split[i];
-          var re = /console.log\([A-Za-z0-9 +-]*\)/g;
+          var re = /console.log\([A-Za-z0-9 +-\\']*\)/g;
           var numSubs = logs.length;
           if (numSubs) {
             var l = [];
@@ -163,20 +151,15 @@ var FuncExample = React.createClass({
             while ((match = re.exec(line)) != null) {
               l.push([match.index, match.index + match[0].length]);
             }
-            var newLine = "";
             var cursor = 0;
             var lineElements = [];
             for (var j = 0; j < l.length; j++) {
               var range = l[j];
               var pre = line.slice(cursor, range[0]);
-              var inner = '<a href="#" class="log" data-val="' + logs[j] + '">' + line.slice(range[0], range[1]) + '</a>';
-              newLine += pre;
               lineElements.push(<span>{pre}</span>);
               lineElements.push(<FuncLog val={logs[j]}>{line.slice(range[0], range[1])}</FuncLog>);
-              newLine += inner;
               cursor = range[1];
             }
-            split[i] = newLine;
             elements.push(
               <div className="line">
                 {lineElements}
@@ -207,9 +190,10 @@ var FuncExample = React.createClass({
    */
   getLineNumber: function () {
     var data = printStackTrace();
+    console.info('data', data);
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
-      var chrome = row.indexOf('code') > -1 && row.indexOf('eval') > -1;
+      var chrome = row.indexOf('eval at onRunButtonClicked') > -1;
       if (chrome) {
         var split = row.split(':');
         return parseInt(split[split.length - 2]);
@@ -243,12 +227,13 @@ var FuncExample = React.createClass({
     var fn;
     eval('fn = ' + code);
     //noinspection JSUnusedAssignment
-    fn();
-    window.console.log = oldConsoleLog;
-    this.setState({
-      logs: logs,
-      numberedLogs: numberedLogs
-    });
+    fn(function () {
+      window.console.log = oldConsoleLog;
+      this.setState({
+        logs: logs,
+        numberedLogs: numberedLogs
+      });
+    }.bind(this));
   },
   render: function () {
     var example = this.props.example,
@@ -261,7 +246,7 @@ var FuncExample = React.createClass({
     return (
       <div className="func-example">
         <h3 className="title">
-          {exampleTitle}
+          Example #{this.props.idx + 1}: {exampleTitle}
         </h3>
 
         <div className="tools">
@@ -297,8 +282,8 @@ var Func = React.createClass({
         <FuncDesc func={func}/>
 
         <div className="func-examples">
-          {examples.map(function (example) {
-            return <FuncExample example={example} func={func}/>
+          {examples.map(function (example, idx) {
+            return <FuncExample example={example} func={func} idx={idx} key={idx}/>
           })}
         </div>
       </div>

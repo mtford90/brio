@@ -6,6 +6,7 @@
     "node_modules/async/lib/async.js",
     "node_modules/babel-core/browser-polyfill.js",
     "node_modules/stacktrace-js/dist/stacktrace.js",
+    "node_modules/siesta-orm/dist/siesta.js",
     "vendor/tooltipster/js/jquery.tooltipster.js"
   ],
   "css": [
