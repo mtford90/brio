@@ -45,6 +45,13 @@ a {
   font-size: 12px;
   line-height: 12px;
   padding: 8px 10px;
+  pre {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 $menu-bar-width: 230px;

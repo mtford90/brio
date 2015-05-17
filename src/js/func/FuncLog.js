@@ -6,8 +6,7 @@ var FuncLog = React.createClass({
     return (
       <a href="#"
          ref="hyperlink"
-         className="log"
-         title={this.props.val}>
+         className="log highlighted-tooltip">
         {this.props.children}
       </a>
     );
@@ -16,7 +15,8 @@ var FuncLog = React.createClass({
     var $hyperlink = $(this.refs['hyperlink'].getDOMNode());
     $hyperlink.tooltipster({
       theme: 'my-custom-theme',
-      position: 'top-right'
+      position: 'top-right',
+      content: $('<pre>' + this.props.val + '</pre>')
     });
   }
 });

@@ -9,17 +9,18 @@
         margin-right: 15px;
       }
       .code {
-        .log {
-          text-decoration: none;
-          background-color: #fff7cd;
-          color: black;
-          &:hover {
-            background-color: #fff5a7;
-            color: black;
-          }
 
-        }
       }
     }
+  }
+}
+
+.highlighted-tooltip {
+  text-decoration: none !important;
+  background-color: #fff7cd;
+  color: black !important;
+  &:hover {
+    background-color: #fff5a7;
+    color: black !important;
   }
 }
