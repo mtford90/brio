@@ -11,7 +11,8 @@ var webpack = {
     'jQuery': '$',
     'underscore': '_',
     'moment': 'moment',
-    'async': 'async'
+    'async': 'async',
+    'react-bootstrap': 'ReactBootstrap'
   },
   devtool: 'inline-source-map',
   module: {

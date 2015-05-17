@@ -18,6 +18,7 @@
   "dependencies": {
     "tooltipster": "~3.3.0",
     "jQuery-Collapse": "~1.1.1",
-    "bootstrap-sass": "~3.3.4"
+    "bootstrap-sass": "~3.3.4",
+    "bootstrap": "~3.3.4"
   }
 }

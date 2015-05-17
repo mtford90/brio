@@ -1,4 +1,7 @@
-var React = require('react');
+var React = require('react'),
+  ReactBootstrap = require('react-bootstrap'),
+  Accordion = ReactBootstrap.Accordion,
+  Panel = ReactBootstrap.Panel;
 
 var FuncDef = require('./FuncDef'),
   FuncDesc = require('./FuncDesc'),
@@ -14,11 +17,16 @@ var Func = React.createClass({
         <FuncDef func={func}/>
         <FuncDesc func={func}/>
 
-        <div className="func-examples">
+        <Accordion className="func-examples">
           {examples.map(function (example, idx) {
-            return <FuncExample example={example} func={func} idx={idx} key={idx}/>
+          var header = <span>Example #{idx + 1}: {example.name}</span>;
+            return (
+              <Panel header={header} eventKey={idx}>
+                <FuncExample example={example} func={func} idx={idx} key={idx}/>
+              </Panel>
+            );
           })}
-        </div>
+        </Accordion>
       </div>
     )
   }

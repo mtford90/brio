@@ -64,3 +64,18 @@ a {
   padding: 8px 10px;
 }
 
+.menu-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 230px;
+  border-right: solid 1px #dfe2e7;
+}
+
+.content {
+  padding: 30px 0 40px 230px;
+  width: 100%;
+  max-width: none;
+  overflow-wrap: break-word;
+}

@@ -1,4 +1,6 @@
-var React = require('react');
+var React = require('react'),
+  ReactBootstrap = require('react-bootstrap'),
+  Panel = ReactBootstrap.Panel;
 
 var queue = require('./queue'),
   FuncLog = require('./FuncLog');
@@ -142,18 +144,8 @@ var FuncExample = React.createClass({
     var parsedCode = this.parseCode(code);
 
     return (
-      <div className="func-example">
-        <h3 className="title">
-          Example #{this.props.idx + 1}: {exampleTitle}
-        </h3>
-
-        <div className="tools">
-          <button className="run-button"
-                  type="button"
-                  onClick={this.onRunButtonClicked}>
-            Run
-          </button>
-        </div>
+      <div className="func-example"
+           eventKey={this.props.idx}>
 
         <pre className="code">
           {parsedCode}
