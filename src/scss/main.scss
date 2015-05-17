@@ -30,7 +30,12 @@ a {
   }
   &:hover {
     color: $hover-light-blue;
+    text-decoration: none;
   }
+  &:focus {
+    text-decoration: none;
+  }
+
 }
 
 .my-custom-theme {
@@ -117,9 +122,11 @@ $content-padding: 30px;
     a {
       font-size: 0.88em;
       color: #d7dae3;
-      padding: 0 15px;
       &:hover {
         color: #3ac;
+        text-decoration: none;
+      }
+      &:focus {
         text-decoration: none;
       }
     }
@@ -143,6 +150,9 @@ $content-padding: 30px;
         }
         &.active {
           color: #3ac !important;
+        }
+        &:focus {
+          text-decoration: none;
         }
       }
     }

@@ -7,29 +7,50 @@ var Func = require('./func/Func'),
 var App = React.createClass({
 
   getInitialState: function () {
-    var content = opts.content;
-    var sectionNames = Object.keys(content),
-      currentSectionIndex = 0;
     return {
-      sectionNames: sectionNames,
-      currentSectionIndex: currentSectionIndex
+      currentPageIndex: 0,
+      currentSectionIndex: 0
     }
   },
-
+  getCurrentPage: function () {
+    var pages = opts.pages;
+    return pages[this.state.currentPageIndex];
+  },
+  getSectionNames: function () {
+    var currentPage = this.getCurrentPage();
+    console.log('currentPage', currentPage);
+    var content = currentPage.content || {};
+    return Object.keys(content);
+  },
+  getCurrentSection: function () {
+    var currentPage = this.getCurrentPage();
+    var sectionNames = this.getSectionNames();
+    var currentSectionName = sectionNames[this.state.currentSectionIndex];
+    var content = currentPage.content || {};
+    return content[currentSectionName] || [];
+  },
   selectSection: function (e) {
     var idx = e.target.getAttribute('data-idx');
     this.setState({
       currentSectionIndex: idx
     });
   },
-        //<li><a href="guide.html">Guide</a></li>
-        //    <li><a href="docs.html"
-        //           className="active">Documentation</a></li>
+  selectPage: function (e) {
+    var idx = e.target.getAttribute('data-idx');
+    this.setState({
+      currentPageIndex: idx,
+      currentSectionIndex: 0
+    });
+  },
+  //<li><a href="guide.html">Guide</a></li>
+  //    <li><a href="docs.html"
+  //           className="active">Documentation</a></li>
   render: function () {
-    var sectionNames = this.state.sectionNames,
+    var sectionNames = this.getSectionNames(),
       currentSectionIndex = this.state.currentSectionIndex,
-      currentSectionName = sectionNames[currentSectionIndex],
-      currentSection = opts.content[currentSectionName];
+      currentSection = this.getCurrentSection(),
+      pages = opts.pages,
+      currentPage = this.getCurrentPage();
 
     return (
       <div>
@@ -38,7 +59,23 @@ var App = React.createClass({
             <a href='/'>{opts.title}</a>
           </h1>
           <ul>
-
+            {pages.map(function (page, idx) {
+              var className = '';
+              if (page == currentPage) {
+                className += 'active';
+              }
+              return (
+                <li>
+                  <a href="#"
+                     className={className}
+                     key={idx}
+                     data-idx={idx}
+                     onClick={this.selectPage}>
+                    {page.name}
+                  </a>
+                </li>
+              )
+            }.bind(this))}
           </ul>
         </div>
 
