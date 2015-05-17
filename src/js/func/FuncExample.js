@@ -1,6 +1,8 @@
 var React = require('react'),
   ReactBootstrap = require('react-bootstrap'),
-  Panel = ReactBootstrap.Panel;
+  Panel = ReactBootstrap.Panel,
+  Row = ReactBootstrap.Row,
+  Col = ReactBootstrap.Col;
 
 var queue = require('./queue'),
   FuncLog = require('./FuncLog');
@@ -137,9 +139,7 @@ var FuncExample = React.createClass({
   },
   render: function () {
     var example = this.props.example,
-      code = example.code || '',
-      func = this.props.func,
-      exampleTitle = example.name;
+      code = example.code || '';
 
     var parsedCode = this.parseCode(code);
 
@@ -147,15 +147,26 @@ var FuncExample = React.createClass({
       <div className="func-example"
            eventKey={this.props.idx}>
 
-        <pre className="code">
-          {parsedCode}
-        </pre>
+        <Row>
+          <Col md="9">
+            <h4>Code</h4>
+          </Col>
+          <Col md="3" className="logs">
+            <h4>Output</h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="9">
+            <pre className="code">{parsedCode}</pre>
+          </Col>
+          <Col md="3" className="logs">
+            <pre>{this.state.logs.map(function (l) {
+              return l + '\n';
+            })}</pre>
+          </Col>
+        </Row>
 
-        <div className="logs">
-          <pre>{this.state.logs.map(function (l) {
-            return l + '\n';
-          })}</pre>
-        </div>
+
       </div>
     )
   }

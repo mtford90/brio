@@ -64,17 +64,25 @@ a {
   padding: 8px 10px;
 }
 
+$menu-bar-width: 230px;
+
 .menu-bar {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
-  width: 230px;
+  padding-top: 30px;
+  width: $menu-bar-width;
   border-right: solid 1px #dfe2e7;
 }
 
+$content-padding: 30px;
+
 .content {
-  padding: 30px 0 40px 230px;
+  padding-top: 30px;
+  padding-right: $content-padding;
+  padding-left: $menu-bar-width + $content-padding;
+  padding-bottom: 40px;
   width: 100%;
   max-width: none;
   overflow-wrap: break-word;

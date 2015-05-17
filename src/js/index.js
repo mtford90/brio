@@ -1,93 +1,49 @@
 var React = require('react'),
   _ = require('underscore');
 
-var Func = require('./func/Func');
-
-var opts = [
-  {
-    name: 'siesta.serialise',
-    description: 'YoYoYo!',
-    parameters: {
-      model: {
-        type: 'Model',
-        description: 'A siesta model',
-        optional: false
-      },
-      opts: {
-        type: 'Object',
-        description: 'Options',
-        optional: true,
-        keys: {
-          fields: {},
-          nullAttributes: {},
-          nullRelationships: {}
-        }
-      }
-    },
-    examples: [
-      {
-        name: 'Specifying fields',
-        code: function (done) {
-          var MyCollection = siesta.collection('MyCollection');
-
-          var MyModel = MyCollection.model({
-            name: 'MyModel',
-            attributes: ['field1', 'field2']
-          });
-
-          MyModel.graph({
-            field1: 1,
-            field2: 2
-          }).then(function (instance) {
-            var serialised = instance.serialise(),
-              json = JSON.stringify(serialised, null, 4);
-            console.log(json);
-            done();
-          });
-        }
-      },
-      {
-        name: 'Specifying fields again',
-        code: function (done) {
-          var MyCollection = siesta.collection('MyCollection');
-
-          var MyModel = MyCollection.model({
-            name: 'MyModel',
-            attributes: ['field1', 'field2']
-          });
-
-          MyModel.graph({
-            field1: 1,
-            field2: 2
-          }).then(function (instance) {
-            var serialised = instance.serialise(),
-              json = JSON.stringify(serialised, null, 4);
-            console.log(json);
-            done();
-          });
-        }
-      }
-    ]
-  }
-];
-
+var Func = require('./func/Func'),
+  opts = require('./opts');
 
 var App = React.createClass({
+  getInitialState: function () {
+    var sectionNames = Object.keys(opts),
+      currentSectionIndex = 0;
+    return {
+      sectionNames: sectionNames,
+      currentSectionIndex: currentSectionIndex
+    }
+  },
+  selectSection: function (e) {
+    var idx = e.target.getAttribute('data-idx');
+    this.setState({
+      currentSectionIndex: idx
+    });
+  },
   render: function () {
+    var sectionNames = this.state.sectionNames,
+      currentSectionIndex = this.state.currentSectionIndex,
+      currentSectionName = sectionNames[currentSectionIndex],
+      currentSection = opts[currentSectionName];
+
     return (
       <div>
         <div className="menu-bar">
           <div className="menu">
             <ul>
-              {opts.map(function (func, idx) {
-                return <li key={idx}>{func.name}</li>
-              })}
+              {sectionNames.map(function (sectionName, idx) {
+                var isCurrSection = idx == currentSectionIndex;
+                return (
+                  <li key={idx}>
+                    {isCurrSection ? {sectionName} : <a href="#" data-idx={idx} onClick={this.selectSection}>{sectionName}</a>}
+                  </li>
+                );
+              }.bind(this))}
             </ul>
           </div>
         </div>
         <div>
           <div className="content container">
-            {opts.map(function (func, idx) {
+            {currentSection.map(function (func, idx) {
               return <Func func={func} key={idx}/>
             })}
           </div>
