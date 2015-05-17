@@ -29,3 +29,15 @@
     color: black !important;
   }
 }
+
+.inner-tooltip-contents {
+  h5 {
+    text-decoration: underline;
+  }
+  .key {
+    margin-bottom: 5px;
+    .key-name {
+      font-weight: bold;
+    }
+  }
+}

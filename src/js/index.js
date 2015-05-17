@@ -6,7 +6,8 @@ var Func = require('./func/Func'),
 
 var App = React.createClass({
   getInitialState: function () {
-    var sectionNames = Object.keys(opts),
+    var content = opts.content;
+    var sectionNames = Object.keys(content),
       currentSectionIndex = 0;
     return {
       sectionNames: sectionNames,
@@ -23,12 +24,13 @@ var App = React.createClass({
     var sectionNames = this.state.sectionNames,
       currentSectionIndex = this.state.currentSectionIndex,
       currentSectionName = sectionNames[currentSectionIndex],
-      currentSection = opts[currentSectionName];
+      currentSection = opts.content[currentSectionName];
 
     return (
       <div>
         <div className="menu-bar">
           <div className="menu">
+            <h3 className="title">{opts.title}</h3>
             <ul>
               {sectionNames.map(function (sectionName, idx) {
                 var isCurrSection = idx == currentSectionIndex;

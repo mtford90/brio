@@ -8,7 +8,7 @@ var FuncParam = React.createClass({
 
     var heading = name + ' ' + '<' + def.type + '>';
     if (def.optional) {
-      heading = '[' + heading + ']';
+      heading += ' (optional)'
     }
     return (
       <div>
@@ -16,14 +16,30 @@ var FuncParam = React.createClass({
           <a ref="a" href='#' className="highlighted-tooltip">
             {name}
           </a>
-        {def.optional ? ']' : ''}</span>
+          {def.optional ? ']' : ''}</span>
 
-        <div ref="tooltipContents" style={{display: 'none'}}>
+        <div ref="tooltipContents" style={{display: 'none'}} className="inner-tooltip-contents">
           <h5>{heading}</h5>
+          {def.keys ? this.renderKeys() : ''}
         </div>
       </div>
 
     )
+  },
+  renderKeys: function () {
+    var keys = this.props.def.keys;
+    var keyNames = Object.keys(keys);
+    return keyNames.map(function (keyName) {
+      var key = keys[keyName];
+      console.log('key', key);
+      return (
+        <div className="key">
+          <span className="key-name">{keyName}</span>
+          {key.type ? <span className="key-type">{'<' + key.type + '>'} - </span> : ''}
+          {key.description ? <span className="key-desc">{key.description}</span> : ''}
+        </div>
+      )
+    });
   },
   componentDidMount: function () {
     var $a = $(this.refs['a'].getDOMNode());

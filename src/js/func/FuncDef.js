@@ -14,7 +14,7 @@ var FuncDef = React.createClass({
 
     return (
       <h2 className="func-def">
-
+        <span className="type">function</span>
         <span className="func-name">{name}</span>
         <span className="left-bracket">(</span>
         {paramNames.map(function (paramName, idx) {

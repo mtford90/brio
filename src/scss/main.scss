@@ -30,8 +30,6 @@ a {
   }
 }
 
-
-
 .my-custom-theme {
   border-radius: 5px;
   border: none;
@@ -52,6 +50,7 @@ a {
     padding: 0;
     margin: 0;
   }
+
 }
 
 $menu-bar-width: 230px;
@@ -64,6 +63,11 @@ $menu-bar-width: 230px;
   padding-top: 30px;
   width: $menu-bar-width;
   border-right: solid 1px #dfe2e7;
+  .title {
+    margin: 0;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 $content-padding: 30px;
@@ -78,4 +82,13 @@ $content-padding: 30px;
   overflow-wrap: break-word;
 }
 
+.type {
+  color: #520052;
+  font-size: 12px;
+  font-style: italic;
+  margin-right: 6px;
+  position: relative;
+}
+
 @import "func";
+
