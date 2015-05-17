@@ -66,6 +66,10 @@ $menu-bar-width: 230px;
   padding-top: 30px;
   width: $menu-bar-width;
   border-right: solid 1px #dfe2e7;
+  ul {
+    list-style: none;
+    padding-left: 30px;
+  }
   .title {
     margin: 0;
     margin-left: 10px;

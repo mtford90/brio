@@ -22,7 +22,9 @@ var App = React.createClass({
       currentSectionIndex: idx
     });
   },
-
+        //<li><a href="guide.html">Guide</a></li>
+        //    <li><a href="docs.html"
+        //           className="active">Documentation</a></li>
   render: function () {
     var sectionNames = this.state.sectionNames,
       currentSectionIndex = this.state.currentSectionIndex,
@@ -33,19 +35,11 @@ var App = React.createClass({
       <div>
         <div className="header">
           <h1>
-            <a href='#'>{opts.title}</a>
+            <a href='/'>{opts.title}</a>
           </h1>
           <ul>
-            <li><a href="guide.html">Guide</a></li>
-            <li><a href="docs.html"
-                   className="active">Documentation</a></li>
+
           </ul>
-          <div className="right">
-            <a src="img/gitter.svg"
-               alt="Gitter"
-               data-canonical-src="https://badges.gitter.im/Join%20Chat.svg"
-               style={{maxWidth: '100%'}}/>
-          </div>
         </div>
 
         <div className="menu-bar">
