@@ -1,0 +1,25 @@
+.func {
+  h1, h2 {
+    margin-top: 0;
+  }
+  .func-examples {
+    .func-example {
+      p {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+      .code {
+        .log {
+          text-decoration: none;
+          background-color: #fff7cd;
+          color: black;
+          &:hover {
+            background-color: #fff5a7;
+            color: black;
+          }
+
+        }
+      }
+    }
+  }
+}

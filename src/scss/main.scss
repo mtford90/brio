@@ -30,24 +30,7 @@ a {
   }
 }
 
-.func {
-  .func-examples {
-    .func-example {
-      .code {
-        .log {
-          text-decoration: none;
-          background-color: #fff7cd;
-          color: black;
-          &:hover {
-            background-color: #fff5a7;
-            color: black;
-          }
 
-        }
-      }
-    }
-  }
-}
 
 .my-custom-theme {
   border-radius: 5px;
@@ -87,3 +70,5 @@ $content-padding: 30px;
   max-width: none;
   overflow-wrap: break-word;
 }
+
+@import "func";

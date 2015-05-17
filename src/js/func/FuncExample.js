@@ -146,7 +146,16 @@ var FuncExample = React.createClass({
     return (
       <div className="func-example"
            eventKey={this.props.idx}>
-
+        {
+          example.description ?
+            (
+              <Row>
+                <Col>
+                  <p>{example.description}</p>
+                </Col>
+              </Row>
+            ) : ''
+        }
         <Row>
           <Col md="9">
             <h4>Code</h4>
