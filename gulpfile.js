@@ -13,6 +13,7 @@ var webpack = {
     'moment': 'moment',
     'async': 'async'
   },
+  devtool: 'inline-source-map',
   module: {
     loaders: [
       {
