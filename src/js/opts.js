@@ -2,9 +2,18 @@ var opts = {
   title: 'Siesta',
   pages: [
     {
+      name: 'Guide'
+    },
+    {
       name: 'Documentation',
       content: {
         Serialisation: [
+          {
+            type: 'paragraph',
+            content: 'Serialisation is the process of getting a model ' +
+            'instance ready for conversion into a data transfer format like JSON e.g. ' +
+            'eliminating circular references.'
+          },
           {
             type: 'function',
             name: 'ModelInstance.serialise',
@@ -65,9 +74,6 @@ var opts = {
         'Other Section': [],
         'And Another Section': []
       }
-    },
-    {
-      name: 'Guide'
     }
   ]
 };

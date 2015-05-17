@@ -22,10 +22,12 @@ var App = React.createClass({
     var content = currentPage.content || {};
     return Object.keys(content);
   },
-  getCurrentSection: function () {
-    var currentPage = this.getCurrentPage();
+  getCurrentSectionName: function () {
     var sectionNames = this.getSectionNames();
-    var currentSectionName = sectionNames[this.state.currentSectionIndex];
+    return sectionNames[this.state.currentSectionIndex];
+  }, getCurrentSection: function () {
+    var currentPage = this.getCurrentPage();
+    var currentSectionName = this.getCurrentSectionName();
     var content = currentPage.content || {};
     return content[currentSectionName] || [];
   },
@@ -96,10 +98,18 @@ var App = React.createClass({
         </div>
         <div>
           <div className="content container">
+            <h1>{this.getCurrentSectionName()}</h1>
             {currentSection.map(function (component, idx) {
               var type = component.type;
               if (type == 'function') {
-                return <Func func={component} key={idx}/>
+                return (
+                  <div className='component' data-idx={idx}>
+                    <Func func={component} key={idx} idx={idx}/>
+                  </div>
+                );
+              }
+              else if (type == 'paragraph') {
+                return <p>{component.content}</p>
               }
               else if (!type) {
                 throw new Error('Components must have a type.');

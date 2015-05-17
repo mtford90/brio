@@ -11,7 +11,7 @@ var FuncDef = React.createClass({
       numParams = paramNames.length;
 
     return (
-      <h2 className="func-def">
+      <h3 className="func-def">
         <span className="type">function</span>
         <span className="func-name">{name}</span>
         <span className="left-bracket">(</span>
@@ -24,7 +24,7 @@ var FuncDef = React.createClass({
           )
         })}
         <span className="right-bracket">)</span>
-      </h2>
+      </h3>
     )
   }
 });

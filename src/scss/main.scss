@@ -92,6 +92,11 @@ $content-padding: 30px;
   width: 100%;
   max-width: none;
   overflow-wrap: break-word;
+  h1 {
+    margin-top: 0;
+  }
+  p {
+  }
 }
 
 .type {
@@ -157,6 +162,21 @@ $content-padding: 30px;
       }
     }
   }
+}
+
+.component {
+  position: relative;
+  .idx {
+    position: absolute;
+    left:-14px;
+    top:5px;
+    color: #a2a2a2;
+    font-size: 22px;
+  }
+  .inner-component {
+    padding-left: 24px;
+  }
+
 }
 
 @import "func";
