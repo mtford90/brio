@@ -3,6 +3,12 @@ var React = require('react');
 var queue = require('./queue'),
   FuncLog = require('./FuncLog');
 
+
+var REGEX_DONE = /done\(\)( *);?\n?/g,
+  REGEX_TAB = new RegExp('\t?!\n', 'g'),
+  REGEX_CONSOLE_LOG = /console.log\([A-Za-z0-9 +-\\']*\)/g;
+
+
 var FuncExample = React.createClass({
   componentDidMount: function () {
     this.onRunButtonClicked();
@@ -17,8 +23,8 @@ var FuncExample = React.createClass({
   parseCode: function (code) {
     var raw = code.toString(),
       split = raw
-        .replace(new RegExp('\t|      ', 'g'), '')
-        .replace(/done\(\)( *);?\n?/g, '')
+        //.replace(REGEX_TAB, '')
+        //.replace(REGEX_DONE, '')
         .split('\n'),
       numberedLogs = this.state.numberedLogs;
 
@@ -31,19 +37,18 @@ var FuncExample = React.createClass({
 
         if (logs) {
           var line = split[i];
-          var re = /console.log\([A-Za-z0-9 +-\\']*\)/g;
           var numSubs = logs.length;
           if (numSubs) {
             var l = [];
             var match;
-            while ((match = re.exec(line)) != null) {
+            while ((match = REGEX_CONSOLE_LOG.exec(line)) != null) {
               l.push([match.index, match.index + match[0].length]);
             }
             var cursor = 0;
             var lineElements = [];
             for (var j = 0; j < l.length; j++) {
               var range = l[j];
-              var pre = line.slice(cursor, range[0]);
+              var pre = line.slice(cursor, range[0]).replace('	      ', '');
               lineElements.push(<span>{pre}</span>);
               lineElements.push(<FuncLog val={logs[j]}>{line.slice(range[0], range[1])}</FuncLog>);
               cursor = range[1];
@@ -60,7 +65,7 @@ var FuncExample = React.createClass({
           }
         }
         else {
-          elements.push(<div className="line">{split[i]}</div>)
+          elements.push(<div className="line">{split[i].replace('	      ', '')}</div>)
         }
       }
       return elements.slice(1, elements.length - 1);
@@ -119,7 +124,6 @@ var FuncExample = React.createClass({
       //noinspection JSUnusedAssignment
       fn(function () {
         window.console.log = oldConsoleLog;
-        console.log(1111, logs, numberedLogs);
         this.setState({
           logs: logs,
           numberedLogs: numberedLogs

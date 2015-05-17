@@ -28,16 +28,20 @@ var opts = [
       {
         name: 'Specifying fields',
         code: function (done) {
-          var MyCollection = siesta.collection('MyCollection'),
-            MyModel = MyCollection.model('MyModel', {
-              attributes: ['field1', 'field2']
-            });
+          var MyCollection = siesta.collection('MyCollection');
+
+          var MyModel = MyCollection.model({
+            name: 'MyModel',
+            attributes: ['field1', 'field2']
+          });
 
           MyModel.graph({
             field1: 1,
             field2: 2
           }).then(function (instance) {
-            console.log(instance);
+            var serialised = instance.serialise(),
+              json = JSON.stringify(serialised, null, 4);
+            console.log(json);
             done();
           });
         }
