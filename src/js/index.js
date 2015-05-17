@@ -96,8 +96,17 @@ var App = React.createClass({
         </div>
         <div>
           <div className="content container">
-            {currentSection.map(function (func, idx) {
-              return <Func func={func} key={idx}/>
+            {currentSection.map(function (component, idx) {
+              var type = component.type;
+              if (type == 'function') {
+                return <Func func={component} key={idx}/>
+              }
+              else if (!type) {
+                throw new Error('Components must have a type.');
+              }
+              else {
+                throw new Error('Unknown component type "' + type + '"');
+              }
             })}
           </div>
         </div>

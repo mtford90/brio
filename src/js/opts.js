@@ -6,6 +6,7 @@ var opts = {
       content: {
         Serialisation: [
           {
+            type: 'function',
             name: 'ModelInstance.serialise',
             description: 'Use the serialise function to prepare your instances for use in a data transfer format such as JSON.',
             parameters: {
