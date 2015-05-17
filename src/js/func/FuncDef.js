@@ -2,8 +2,6 @@ var React = require('react');
 
 var FuncParam = require('./FuncParam');
 
-console.log('FuncParam', FuncParam);
-
 var FuncDef = React.createClass({
   render: function () {
     var func = this.props.func,

@@ -5,6 +5,7 @@ var Func = require('./func/Func'),
   opts = require('./opts');
 
 var App = React.createClass({
+
   getInitialState: function () {
     var content = opts.content;
     var sectionNames = Object.keys(content),
@@ -14,12 +15,14 @@ var App = React.createClass({
       currentSectionIndex: currentSectionIndex
     }
   },
+
   selectSection: function (e) {
     var idx = e.target.getAttribute('data-idx');
     this.setState({
       currentSectionIndex: idx
     });
   },
+
   render: function () {
     var sectionNames = this.state.sectionNames,
       currentSectionIndex = this.state.currentSectionIndex,
@@ -28,15 +31,32 @@ var App = React.createClass({
 
     return (
       <div>
+        <div className="header">
+          <h1>
+            <a href='#'>{opts.title}</a>
+          </h1>
+          <ul>
+            <li><a href="guide.html">Guide</a></li>
+            <li><a href="docs.html"
+                   className="active">Documentation</a></li>
+          </ul>
+          <div className="right">
+            <a src="img/gitter.svg"
+               alt="Gitter"
+               data-canonical-src="https://badges.gitter.im/Join%20Chat.svg"
+               style={{maxWidth: '100%'}}/>
+          </div>
+        </div>
+
         <div className="menu-bar">
           <div className="menu">
-            <h3 className="title">{opts.title}</h3>
             <ul>
               {sectionNames.map(function (sectionName, idx) {
                 var isCurrSection = idx == currentSectionIndex;
                 return (
                   <li key={idx}>
-                    {isCurrSection ? {sectionName} : <a href="#" data-idx={idx} onClick={this.selectSection}>{sectionName}</a>}
+                    {isCurrSection ? {sectionName} :
+                      <a href="#" data-idx={idx} onClick={this.selectSection}>{sectionName}</a>}
                   </li>
                 );
               }.bind(this))}
@@ -54,6 +74,7 @@ var App = React.createClass({
       </div>
     )
   }
+
 });
 
 var elem = document.getElementById('app');

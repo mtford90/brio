@@ -1,5 +1,8 @@
 @import 'palette';
 @import 'responsive';
+@import url("//fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:300");
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 
 html, body {
   -webkit-font-smoothing: antialiased;
@@ -58,7 +61,7 @@ $menu-bar-width: 230px;
 .menu-bar {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 52px;
   bottom: 0;
   padding-top: 30px;
   width: $menu-bar-width;
@@ -90,5 +93,58 @@ $content-padding: 30px;
   position: relative;
 }
 
+.header {
+  height: 52px;
+  text-shadow: none;
+  background-color: #242a33;
+  border-bottom: solid 2px #3ac;
+  padding: 15px 15px 15px 30px;
+  zoom: 1;
+  line-height: 20px;
+  position: relative;
+  h1 {
+    float: left;
+    font-size: 20px !important;
+    color: #9090aa !important;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    font-family: montserrat, sans-serif;
+    a {
+      font-size: 0.88em;
+      color: #d7dae3;
+      padding: 0 15px;
+      &:hover {
+        color: #3ac;
+        text-decoration: none;
+      }
+    }
+  }
+  ul {
+    border-left: solid 1px #dfe2e7;
+    margin-left: 15px;
+    list-style: none;
+    li {
+      display: block;
+      float: left;
+      font-size: 16px;
+      border-style: none;
+      a {
+        font-size: 0.88em;
+        color: #d7dae3;
+        padding: 0 15px;
+        &:hover {
+          color: #3ac;
+          text-decoration: none;
+        }
+        &.active {
+          color: #3ac !important;
+        }
+      }
+    }
+  }
+}
+
 @import "func";
+
 
