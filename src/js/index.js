@@ -5,8 +5,39 @@ var Func = require('./func/Func'),
   opts = require('./opts');
 
 var Menu = React.createClass({
+  renderSubSection: function (subsectionName, section) {
+    return (
+      <span>{subsectionName}</span>
+    )
+  },
+  renderSection: function (sectionName, section) {
+    var topLevel = Object.keys(section);
+    console.log('sectionName', sectionName);
+    return (
+      <ul>
+        {topLevel.map(function (k) {
+          var s = section[k];
+          console.log('s', s);
+          var isArr = Array.isArray(s);
+          var subsections = '';
+          if (!isArr) {
+            var subSectionNames = Object.keys(s);
+            subsections = <ul>
+              {subSectionNames.map(function (subsectionName) {
+                return <li><a>{subsectionName}</a></li>
+              })}
+            </ul>;
+          }
+          return <li>
+            <a>{k}</a>
+            {subsections}
+          </li>
+        }.bind(this))}
+      </ul>
+    )
+  },
   render: function () {
-    var sectionNames = [];
+    var sectionNames = Object.keys(this.props.pages);
     //
 //
 //<ul>
@@ -28,7 +59,9 @@ var Menu = React.createClass({
     return (
       <div className="menu-bar">
         <div className="menu">
-
+          {sectionNames.map(function (sectionName) {
+            return this.renderSection(sectionName, this.props.pages[sectionName]);
+          }.bind(this))}
         </div>
       </div>
     )
@@ -127,10 +160,10 @@ var App = React.createClass({
           </ul>
         </div>
 
-        <Menu/>
+        <Menu pages={opts.pages}/>
 
         <div>
-          <Content/>
+          <Content pages={opts.pages}/>
         </div>
 
       </div>

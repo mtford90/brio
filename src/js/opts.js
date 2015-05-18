@@ -66,7 +66,10 @@ var opts = {
           ]
         }
       ],
-      'Other Section': [],
+      'Other Section': {
+        'Inner Section': [],
+        'Inner Section 2': []
+      },
       'And Another Section': []
     },
     Guide: {}
