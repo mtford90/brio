@@ -9,6 +9,7 @@ var webpack = {
   externals: {
     'react': 'React',
     'jQuery': '$',
+    'react-router': 'ReactRouter',
     'underscore': '_',
     'moment': 'moment',
     'async': 'async',

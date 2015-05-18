@@ -4,76 +4,122 @@ var React = require('react'),
 var Func = require('./func/Func'),
   opts = require('./opts');
 
-var App = React.createClass({
-
-  getInitialState: function () {
-    return {
-      currentPageIndex: 0,
-      currentSectionIndex: 0
-    }
-  },
-  getCurrentPage: function () {
-    var pages = opts.pages;
-    return pages[this.state.currentPageIndex];
-  },
-  getSectionNames: function () {
-    var currentPage = this.getCurrentPage();
-    console.log('currentPage', currentPage);
-    var content = currentPage.content || {};
-    return Object.keys(content);
-  },
-  getCurrentSectionName: function () {
-    var sectionNames = this.getSectionNames();
-    return sectionNames[this.state.currentSectionIndex];
-  }, getCurrentSection: function () {
-    var currentPage = this.getCurrentPage();
-    var currentSectionName = this.getCurrentSectionName();
-    var content = currentPage.content || {};
-    return content[currentSectionName] || [];
-  },
-  selectSection: function (e) {
-    var idx = e.target.getAttribute('data-idx');
-    this.setState({
-      currentSectionIndex: idx
-    });
-  },
-  selectPage: function (e) {
-    var idx = e.target.getAttribute('data-idx');
-    this.setState({
-      currentPageIndex: idx,
-      currentSectionIndex: 0
-    });
-  },
-  //<li><a href="guide.html">Guide</a></li>
-  //    <li><a href="docs.html"
-  //           className="active">Documentation</a></li>
+var Menu = React.createClass({
   render: function () {
-    var sectionNames = this.getSectionNames(),
-      currentSectionIndex = this.state.currentSectionIndex,
-      currentSection = this.getCurrentSection(),
-      pages = opts.pages,
-      currentPage = this.getCurrentPage();
+    var sectionNames = [];
+    //
+//
+//<ul>
+//          {sectionNames.map(function (sectionName, idx) {
+//            var isCurrSection = idx == currentSectionIndex;
+//            return (
+//              <li key={idx}>
+//                {isCurrSection ? {sectionName} :
+//                  <a data-idx={idx}
+//                     data-section-name={sectionName}
+//                     onClick={this.selectSection}>
+//                    {sectionName}
+//                  </a>}
+//              </li>
+//            );
+//          }.bind(this))}
+//        </ul>
+
+    return (
+      <div className="menu-bar">
+        <div className="menu">
+
+        </div>
+      </div>
+    )
+  }
+});
+
+var Content = React.createClass({
+  render: function () {
+    //<h1>{this.getCurrentSectionName()}</h1>
+    //{currentSection.map(function (component, idx) {
+    //  var type = component.type;
+    //  if (type == 'function') {
+    //    return (
+    //      <div className='component' data-idx={idx}>
+    //        <Func func={component} key={idx} idx={idx}/>
+    //      </div>
+    //    );
+    //  }
+    //  else if (type == 'paragraph') {
+    //    return <p>{component.content}</p>
+    //  }
+    //  else if (!type) {
+    //    throw new Error('Components must have a type.');
+    //  }
+    //  else {
+    //    throw new Error('Unknown component type "' + type + '"');
+    //  }
+    //})}
+    return (
+      <div className="content container">
+      </div>
+    )
+  }
+});
+
+var App = React.createClass({
+  getPageNames: function () {
+    return Object.keys(opts.pages);
+  },
+  componentDidMount: function () {
+    console.log(window.location.hash);
+    window.onhashchange = function () {
+      var pageName = this.getPageNameFromHash();
+      this.setState({
+        pageName: pageName
+      });
+    }.bind(this);
+  },
+  getPageNameFromHash: function () {
+    var hash = window.location.hash.replace('#', '');
+    var hierarchy = hash.split('/').slice(1);
+    var pageName = hierarchy[0];
+    if (!pageName) {
+      var pageNames = Object.keys(opts.pages);
+      pageName = pageNames[0];
+    }
+    return pageName;
+  },
+  getInitialState: function () {
+    var pageName = this.getPageNameFromHash();
+    return {
+      pageName: pageName
+    };
+  },
+  render: function () {
+
+    var pages = opts.pages,
+      currentPageName = this.state.pageName,
+      pageNames = Object.keys(pages);
 
     return (
       <div>
         <div className="header">
           <h1>
-            <a href='/'>{opts.title}</a>
+            <a href='#'>{opts.title}</a>
           </h1>
           <ul>
-            {pages.map(function (page, idx) {
+            {Object.keys(pages).map(function (pageName, idx) {
+              var page = opts.pages[pageName];
               var className = '';
-              if (page == currentPage) {
+              if (pageName == currentPageName) {
                 className += 'active';
               }
               return (
                 <li>
-                  <a href="#"
+                  <a href={'/#/' + pageName}
                      className={className}
                      key={idx}
                      data-idx={idx}
-                     onClick={this.selectPage}>
-                    {page.name}
+                     data-page-name={pageName}>
+                    {pageName}
                   </a>
                 </li>
               )
@@ -81,44 +127,10 @@ var App = React.createClass({
           </ul>
         </div>
 
-        <div className="menu-bar">
-          <div className="menu">
-            <ul>
-              {sectionNames.map(function (sectionName, idx) {
-                var isCurrSection = idx == currentSectionIndex;
-                return (
-                  <li key={idx}>
-                    {isCurrSection ? {sectionName} :
-                      <a href="#" data-idx={idx} onClick={this.selectSection}>{sectionName}</a>}
-                  </li>
-                );
-              }.bind(this))}
-            </ul>
-          </div>
-        </div>
+        <Menu/>
+
         <div>
-          <div className="content container">
-            <h1>{this.getCurrentSectionName()}</h1>
-            {currentSection.map(function (component, idx) {
-              var type = component.type;
-              if (type == 'function') {
-                return (
-                  <div className='component' data-idx={idx}>
-                    <Func func={component} key={idx} idx={idx}/>
-                  </div>
-                );
-              }
-              else if (type == 'paragraph') {
-                return <p>{component.content}</p>
-              }
-              else if (!type) {
-                throw new Error('Components must have a type.');
-              }
-              else {
-                throw new Error('Unknown component type "' + type + '"');
-              }
-            })}
-          </div>
+          <Content/>
         </div>
 
       </div>
@@ -126,6 +138,7 @@ var App = React.createClass({
   }
 
 });
+
 
 var elem = document.getElementById('app');
 React.render(<App/>, elem);

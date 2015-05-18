@@ -10,7 +10,8 @@
     "vendor/tooltipster/js/jquery.tooltipster.js",
     "vendor/jQuery-Collapse/src/jquery.collapse.js",
     "vendor/bootstrap-sass/assets/javascripts/bootstrap.js",
-    "node_modules/react-bootstrap/dist/react-bootstrap.js"
+    "node_modules/react-bootstrap/dist/react-bootstrap.js",
+    "node_modules/react-router/umd/ReactRouter.js"
   ],
   "css": [
     "vendor/tooltipster/css/tooltipster.css",
