@@ -5,72 +5,65 @@ var Func = require('./func/Func'),
   opts = require('./opts');
 
 var Menu = React.createClass({
-  renderSubSection: function (subsectionName, section) {
-    return (
-      <span>{subsectionName}</span>
-    )
-  },
-  renderSection: function (sectionName, section) {
-    var topLevel = Object.keys(section);
-    console.log('sectionName', sectionName);
-    return (
-      <ul>
-        {topLevel.map(function (k) {
-          var s = section[k];
-          console.log('s', s);
-          var isArr = Array.isArray(s);
-          var subsections = '';
-          if (!isArr) {
-            var subSectionNames = Object.keys(s);
-            subsections = <ul>
-              {subSectionNames.map(function (subsectionName) {
-                return <li><a>{subsectionName}</a></li>
-              })}
-            </ul>;
-          }
-          return <li>
-            <a>{k}</a>
-            {subsections}
-          </li>
-        }.bind(this))}
-      </ul>
-    )
+  _renderSection: function (path, section) {
+    if (_.isArray(section)) {
+      return ''
+    }
+    else {
+      var sectionNames = Object.keys(section);
+      return (
+        <ul>
+          {sectionNames.map(function (name) {
+            var href = path + '/' + name;
+            var hash = window.location.hash;
+            var isActive = href == ('/' + hash);
+            return [
+              (
+                <li>
+                  {isActive ? {name} : <a href={href}>{name}</a>}
+                </li>
+              ),
+              this._renderSection(href, section[name])
+            ];
+          }.bind(this))}
+        </ul>
+      )
+    }
   },
   render: function () {
-    var sectionNames = Object.keys(this.props.pages);
-    //
-//
-//<ul>
-//          {sectionNames.map(function (sectionName, idx) {
-//            var isCurrSection = idx == currentSectionIndex;
-//            return (
-//              <li key={idx}>
-//                {isCurrSection ? {sectionName} :
-//                  <a data-idx={idx}
-//                     data-section-name={sectionName}
-//                     onClick={this.selectSection}>
-//                    {sectionName}
-//                  </a>}
-//              </li>
-//            );
-//          }.bind(this))}
-//        </ul>
-
     return (
       <div className="menu-bar">
         <div className="menu">
-          {sectionNames.map(function (sectionName) {
-            return this.renderSection(sectionName, this.props.pages[sectionName]);
-          }.bind(this))}
+          {this._renderSection('/#/' + this.props.pageName, this.props.page)}
         </div>
       </div>
     )
   }
 });
 
+var Breadcrumbs = React.createClass({
+  render: function () {
+    var hierarchy = this.props.hierarchy;
+    var href = '/#/' + hierarchy[0];
+    return (
+      <div className="breadcrumbs">
+         <ul >
+        {hierarchy.slice(1, hierarchy.length - 1).map(function (section) {
+          href += '/' + section;
+          return <li><a href={hrefgi}>{section}</a></li>
+        })}
+      </ul>
+        </div>
+
+    );
+  }
+});
+
 var Content = React.createClass({
   render: function () {
-    //<h1>{this.getCurrentSectionName()}</h1>
+    var {section, sectionName} = this.props;
+
+
     //{currentSection.map(function (component, idx) {
     //  var type = component.type;
     //  if (type == 'function') {
@@ -91,7 +84,8 @@ var Content = React.createClass({
     //  }
     //})}
     return (
-      <div className="content container">
+      <div className="content">
+        <h1>{sectionName}</h1>
       </div>
     )
   }
@@ -102,35 +96,47 @@ var App = React.createClass({
     return Object.keys(opts.pages);
   },
   componentDidMount: function () {
-    console.log(window.location.hash);
     window.onhashchange = function () {
-      var pageName = this.getPageNameFromHash();
       this.setState({
-        pageName: pageName
-      });
+        hierarchy: this._constructHierarchy()
+      })
     }.bind(this);
   },
-  getPageNameFromHash: function () {
-    var hash = window.location.hash.replace('#', '');
-    var hierarchy = hash.split('/').slice(1);
-    var pageName = hierarchy[0];
-    if (!pageName) {
-      var pageNames = Object.keys(opts.pages);
-      pageName = pageNames[0];
-    }
-    return pageName;
+  _constructHierarchy: function () {
+    return window.location.hash.replace('#', '').split('/').slice(1);
   },
   getInitialState: function () {
-    var pageName = this.getPageNameFromHash();
     return {
-      pageName: pageName
+      hierarchy: this._constructHierarchy()
     };
   },
+  getCurrPageName: function () {
+    return this.state.hierarchy[0] || Object.keys(opts.pages)[0];
+  },
+  getCurrSection: function () {
+    var section = opts.pages[this.getCurrPageName()];
+    console.log('section', section);
+    var hierarchy = this.state.hierarchy;
+    hierarchy
+      .slice(1)
+      .forEach(function (sectionName) {
+        section = section[sectionName];
+      });
+    return section;
+  },
+  getCurrSectionName: function () {
+    var hierarchy = this.state.hierarchy;
+    if (hierarchy.length) {
+      return hierarchy[hierarchy.length - 1];
+    }
+    else {
+      return this.getCurrPageName();
+    }
+  },
   render: function () {
-
     var pages = opts.pages,
-      currentPageName = this.state.pageName,
-      pageNames = Object.keys(pages);
+      currentPageName = this.getCurrPageName(),
+      page = pages[currentPageName];
 
     return (
       <div>
@@ -140,7 +146,6 @@ var App = React.createClass({
           </h1>
           <ul>
             {Object.keys(pages).map(function (pageName, idx) {
-              var page = opts.pages[pageName];
               var className = '';
               if (pageName == currentPageName) {
                 className += 'active';
@@ -160,10 +165,12 @@ var App = React.createClass({
           </ul>
         </div>
 
-        <Menu pages={opts.pages}/>
+        <Menu page={page} pageName={currentPageName}/>
 
-        <div>
-          <Content pages={opts.pages}/>
+
+        <div className="content-wrapper">
+            <Breadcrumbs hierarchy={this.state.hierarchy} pageName={currentPageName}/>
+            <Content section={this.getCurrSection()} sectionName={this.getCurrSectionName()}/>
         </div>
 
       </div>

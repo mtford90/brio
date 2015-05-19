@@ -84,18 +84,57 @@ $menu-bar-width: 230px;
 
 $content-padding: 30px;
 
-.content {
-  padding-top: 30px;
-  padding-right: $content-padding;
-  padding-left: $menu-bar-width + $content-padding;
-  padding-bottom: 40px;
-  width: 100%;
-  max-width: none;
-  overflow-wrap: break-word;
-  h1 {
-    margin-top: 0;
+.content-wrapper {
+
+  .breadcrumbs {
+    color: #ccc;
+    padding: 3px;
+    margin-bottom: 25px;
+    ul {
+      margin-left: 0;
+      padding-left: 0;
+      display: inline;
+      border: none;
+      list-style: none;
+      li {
+        margin-left: 0;
+        list-style: none;
+        padding-left: 2px;
+        border: none;
+        display: inline;
+        &:before {
+          content: '-';
+          color: #000000;
+          $margin: 4px;
+          margin-right: $margin;
+          margin-left: $margin;
+        }
+        &:first-child {
+          &:before {
+            content: '';
+            $margin: 0;
+            margin-right: $margin;
+            margin-left: $margin;
+          }
+        }
+      }
+    }
   }
-  p {
+
+  padding-left: $menu-bar-width + $content-padding;
+  padding-top: 30px;
+
+  .content {
+    padding-right: $content-padding;
+    padding-bottom: 40px;
+    width: 100%;
+    max-width: none;
+    overflow-wrap: break-word;
+    h1 {
+      margin-top: 0;
+    }
+    p {
+    }
   }
 }
 
@@ -168,8 +207,8 @@ $content-padding: 30px;
   position: relative;
   .idx {
     position: absolute;
-    left:-14px;
-    top:5px;
+    left: -14px;
+    top: 5px;
     color: #a2a2a2;
     font-size: 22px;
   }
