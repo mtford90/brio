@@ -89,23 +89,33 @@ gulp.task('watch', ['build', 'serve'], function () {
   gulp.watch('src/vendor.config.json', ['build:vendor']);
 });
 
-gulp.task('dist:concat', function () {
+gulp.task('dist:js:concat', function () {
   return gulp.src(['build/vendor.js', 'build/bundle.js'])
     .pipe(plugins.concat('brio.js'))
     .pipe(gulp.dest('dist'))
 });
 
-gulp.task('dist:minify', function () {
+gulp.task('dist:js:minify', function () {
   return gulp.src(['dist/brio.js'])
     .pipe(plugins.uglify())
     .pipe(plugins.rename('brio.min.js'))
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('dist:css', function () {
+  return gulp.src(['build/vendor.css', 'build/style.css'])
+    .pipe(plugins.concat('brio.css'))
+    .pipe(gulp.dest('dist'))
+    .pipe(plugins.minifyCss())
+    .pipe(plugins.rename('brio.min.css'))
+    .pipe(gulp.dest('dist'))
+});
+
 gulp.task('dist', function () {
   runSequence(
     'build',
-    'dist:concat',
-    'dist:minify'
+    'dist:js:concat',
+    'dist:js:minify',
+    'dist:css'
   )
 });
