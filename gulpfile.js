@@ -88,3 +88,24 @@ gulp.task('watch', ['build', 'serve'], function () {
   gulp.watch('src/**/*.html', ['build:html']);
   gulp.watch('src/vendor.config.json', ['build:vendor']);
 });
+
+gulp.task('dist:concat', function () {
+  return gulp.src(['build/vendor.js', 'build/bundle.js'])
+    .pipe(plugins.concat('brio.js'))
+    .pipe(gulp.dest('dist'))
+});
+
+gulp.task('dist:minify', function () {
+  return gulp.src(['dist/brio.js'])
+    .pipe(plugins.uglify())
+    .pipe(plugins.rename('brio.min.js'))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('dist', function () {
+  runSequence(
+    'build',
+    'dist:concat',
+    'dist:minify'
+  )
+});
