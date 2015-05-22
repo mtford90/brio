@@ -74,7 +74,12 @@ var opts = {
       },
       'And Another Section': []
     },
-    Guide: {}
+    Guide: [
+      {
+        type: 'markdown',
+        url: 'guide.md'
+      }
+    ]
   }
 };
 module.exports = opts;

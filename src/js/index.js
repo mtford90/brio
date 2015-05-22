@@ -1,11 +1,12 @@
 var React = require('react'),
-  _ = require('underscore');
+  _ = require('underscore'),
+  markdown = require('markdown');
 
 var Func = require('./func/Func'),
   opts = require('./opts');
 
 var Menu = React.createClass({
-  _renderSection: function (path, section) {
+  _renderSection: function (depth, path, section) {
     if (_.isArray(section)) {
       return ''
     }
@@ -15,15 +16,20 @@ var Menu = React.createClass({
         <ul>
           {sectionNames.map(function (name) {
             var href = path + '/' + name;
-            var hash = window.location.hash;
-            var isActive = href == ('/' + hash);
+            console.log('name', name);
+            console.log('name', name);
+            var hierarchy = this.props.hierarchy;
+            console.log('hierarchy', hierarchy);
+            var curr = hierarchy[depth];
+            console.log('curr', curr);
+            var isActive = name == curr;
             return [
               (
                 <li>
                   {isActive ? {name} : <a href={href}>{name}</a>}
                 </li>
               ),
-              this._renderSection(href, section[name])
+              this._renderSection(depth + 1, href, section[name])
             ];
           }.bind(this))}
         </ul>
@@ -34,7 +40,7 @@ var Menu = React.createClass({
     return (
       <div className="menu-bar">
         <div className="menu">
-          {this._renderSection('/#/' + this.props.pageName, this.props.page)}
+          {this._renderSection(1, '/#/' + this.props.pageName, this.props.page)}
         </div>
       </div>
     )
@@ -47,45 +53,102 @@ var Breadcrumbs = React.createClass({
     var href = '/#/' + hierarchy[0];
     return (
       <div className="breadcrumbs">
-         <ul >
-        {hierarchy.slice(1, hierarchy.length - 1).map(function (section) {
-          href += '/' + section;
-          return <li><a href={hrefgi}>{section}</a></li>
-        })}
-      </ul>
-        </div>
+        <ul >
+          {hierarchy.slice(1, hierarchy.length - 1).map(function (section) {
+            href += '/' + section;
+            return <li><a href={href}>{section}</a></li>
+          })}
+        </ul>
+      </div>
 
     );
   }
 });
 
 var Content = React.createClass({
+  getInitialState: function () {
+    return {
+      storage: {}
+    }
+  },
+  initComponents: function (section) {
+    section = section || this.props.section;
+    console.log('initComponents', section);
+    if (_.isArray(section)) {
+      section.forEach(function (component, idx) {
+        if (component.type == 'markdown') {
+          if (component.url) {
+            this.getMarkdown(component, idx);
+          }
+          else if (component.markdown) {
+            this.state.storage[idx] = markdown.toHTML(component.markdown);
+            this.forceUpdate();
+          }
+        }
+      }.bind(this));
+    }
+  },
+  componentWillReceiveProps: function (nextProps) {
+    console.log('componentWillReceiveProps', nextProps);
+    if (this.props.section != nextProps.section) {
+      this.initComponents(nextProps.section);
+    }
+  },
+  componentDidMount: function () {
+    this.initComponents();
+  },
+  getMarkdown: function (md, idx) {
+    var url = md.url;
+    console.log('getMarkdown', url);
+    $.get(url)
+      .success(function (data) {
+        this.state.storage[idx] = markdown.toHTML(data);
+        this.forceUpdate();
+      }.bind(this))
+      .fail(function (jqXHR) {
+        console.error('Error getting markdown at "' + url + '"', jqXHR);
+      });
+  },
   render: function () {
     var {section, sectionName} = this.props;
 
+    console.log('section', section);
+    console.log('sectionName', sectionName);
 
-    //{currentSection.map(function (component, idx) {
-    //  var type = component.type;
-    //  if (type == 'function') {
-    //    return (
-    //      <div className='component' data-idx={idx}>
-    //        <Func func={component} key={idx} idx={idx}/>
-    //      </div>
-    //    );
-    //  }
-    //  else if (type == 'paragraph') {
-    //    return <p>{component.content}</p>
-    //  }
-    //  else if (!type) {
-    //    throw new Error('Components must have a type.');
-    //  }
-    //  else {
-    //    throw new Error('Unknown component type "' + type + '"');
-    //  }
-    //})}
+    if (_.isArray(section)) {
+      var content = section.map(function (component, idx) {
+        var type = component.type;
+        if (type == 'function') {
+          return (
+            <div className='component' data-idx={idx}>
+              <Func func={component} key={idx} idx={idx}/>
+            </div>
+          );
+        }
+        else if (type == 'paragraph') {
+          return <p key={idx}>{component.content}</p>
+        }
+        else if (type == 'markdown' || type == 'md') {
+          return <div className='markdown'
+                      key={idx}
+                      dangerouslySetInnerHTML={{__html: this.state.storage[idx] || ''}}/>
+        }
+        else if (!type) {
+          throw new Error('Components must have a type.');
+        }
+        else {
+          throw new Error('Unknown component type "' + type + '"');
+        }
+      }.bind(this));
+    }
+    else {
+
+    }
+
     return (
       <div className="content">
         <h1>{sectionName}</h1>
+        {content}
       </div>
     )
   }
@@ -103,7 +166,9 @@ var App = React.createClass({
     }.bind(this);
   },
   _constructHierarchy: function () {
-    return window.location.hash.replace('#', '').split('/').slice(1);
+    var hash = window.location.hash;
+    var hierarchy = hash.replace('#', '').split('/').slice(1);
+    return hierarchy;
   },
   getInitialState: function () {
     return {
@@ -114,29 +179,37 @@ var App = React.createClass({
     return this.state.hierarchy[0] || Object.keys(opts.pages)[0];
   },
   getCurrSection: function () {
-    var section = opts.pages[this.getCurrPageName()];
-    console.log('section', section);
+    var name = this.getCurrPageName();
+    var section = opts.pages[name];
     var hierarchy = this.state.hierarchy;
+
+    var clonedHierarchy = _.extend([], hierarchy);
+
     hierarchy
       .slice(1)
       .forEach(function (sectionName) {
         section = section[sectionName];
+        name = sectionName;
       });
-    return section;
-  },
-  getCurrSectionName: function () {
-    var hierarchy = this.state.hierarchy;
-    if (hierarchy.length) {
-      return hierarchy[hierarchy.length - 1];
+
+    while (!_.isArray(section)) {
+      name = Object.keys(section)[0];
+      section = section[name];
+      clonedHierarchy.push(name);
     }
-    else {
-      return this.getCurrPageName();
-    }
+
+    console.log('clonedHierarchy', clonedHierarchy);
+
+    return {section: section, name: name, hierarchy: clonedHierarchy};
   },
   render: function () {
     var pages = opts.pages,
       currentPageName = this.getCurrPageName(),
       page = pages[currentPageName];
+
+    var {name, section, hierarchy} = this.getCurrSection();
+
+    console.log('hierarchy', hierarchy);
 
     return (
       <div>
@@ -165,12 +238,11 @@ var App = React.createClass({
           </ul>
         </div>
 
-        <Menu page={page} pageName={currentPageName}/>
-
+        <Menu page={page} pageName={currentPageName} hierarchy={hierarchy}/>
 
         <div className="content-wrapper">
-            <Breadcrumbs hierarchy={this.state.hierarchy} pageName={currentPageName}/>
-            <Content section={this.getCurrSection()} sectionName={this.getCurrSectionName()}/>
+          <Breadcrumbs hierarchy={this.state.hierarchy} pageName={name}/>
+          <Content section={section} sectionName={name}/>
         </div>
 
       </div>

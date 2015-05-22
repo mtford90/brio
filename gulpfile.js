@@ -13,6 +13,7 @@ var webpack = {
     'underscore': '_',
     'moment': 'moment',
     'async': 'async',
+    'markdown': 'markdown',
     'react-bootstrap': 'ReactBootstrap'
   },
   devtool: 'inline-source-map',
