@@ -8,10 +8,10 @@ window.brio = function (opts) {
   var {id, docs, highlight} = opts;
 
   if (highlight) {
-      marked.setOptions({
-        highlight: function (code) {
-            return hljs.highlightAuto(code).value;
-        }
+    marked.setOptions({
+      highlight: function (code) {
+        return hljs.highlightAuto(code).value;
+      }
     });
   }
 
@@ -66,8 +66,15 @@ window.brio = function (opts) {
           <ul >
             {hierarchy.slice(1, hierarchy.length - 1).map(function (section) {
               href += '/' + section;
-              return <li><a href={href}>{section}</a></li>
+              return (
+                <li>
+                  <a href={href}>{section}</a>
+                </li>
+              )
             })}
+            <li>
+              {hierarchy[hierarchy.length - 1]}
+            </li>
           </ul>
         </div>
 
@@ -157,7 +164,6 @@ window.brio = function (opts) {
 
       return (
         <div className="content">
-          <h1>{sectionName}</h1>
           {content}
         </div>
       )
@@ -251,7 +257,6 @@ window.brio = function (opts) {
           <Menu page={page} pageName={currentPageName} hierarchy={hierarchy}/>
 
           <div className="content-wrapper">
-            <Breadcrumbs hierarchy={this.state.hierarchy} pageName={name}/>
             <Content section={section} sectionName={name}/>
           </div>
 
@@ -260,6 +265,7 @@ window.brio = function (opts) {
     }
 
   });
+            //<Breadcrumbs hierarchy={this.state.hierarchy} pageName={name}/>
 
   var elem = document.getElementById(id);
   React.render(<App/>, elem);
