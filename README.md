@@ -1,6 +1,9 @@
 # brio
-An interactive javascript documentation generator
 
-# ideas
+Brio is a documentation generator for browser based Javascript libraries with a focus on interactivity. 
 
-* Use jsdocs eventually?
+
+Features:
+
+* Markdown (parsed into HTML)
+* 

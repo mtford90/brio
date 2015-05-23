@@ -6,9 +6,8 @@ var FuncLog = React.createClass({
     return (
       <a href="#"
          ref="hyperlink"
-         className="log highlighted-tooltip">
-        {this.props.children}
-      </a>
+         className="log highlighted-tooltip"
+         dangerouslySetInnerHTML={{__html: this.props.highlight(this.props.content)}}/>
     );
   },
   componentDidMount: function () {

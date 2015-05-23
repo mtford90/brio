@@ -1,10 +1,20 @@
 var React = require('react'),
   _ = require('underscore'),
-  markdown = require('markdown');
+  marked = require('marked');
 
 var Func = require('./func/Func');
 
-window.brio = function (id, opts) {
+window.brio = function (opts) {
+  var {id, docs, highlight} = opts;
+
+  if (highlight) {
+      marked.setOptions({
+        highlight: function (code) {
+            return hljs.highlightAuto(code).value;
+        }
+    });
+  }
+
   var Menu = React.createClass({
     _renderSection: function (depth, path, section) {
       if (_.isArray(section)) {
@@ -40,7 +50,7 @@ window.brio = function (id, opts) {
       return (
         <div className="menu-bar">
           <div className="menu">
-            {this._renderSection(1, '/#/' + this.props.pageName, this.props.page)}
+            {this._renderSection(1, '#/' + this.props.pageName, this.props.page)}
           </div>
         </div>
       )
@@ -50,7 +60,7 @@ window.brio = function (id, opts) {
   var Breadcrumbs = React.createClass({
     render: function () {
       var hierarchy = this.props.hierarchy;
-      var href = '/#/' + hierarchy[0];
+      var href = '#/' + hierarchy[0];
       return (
         <div className="breadcrumbs">
           <ul >
@@ -81,7 +91,7 @@ window.brio = function (id, opts) {
               this.getMarkdown(component, idx);
             }
             else if (component.markdown) {
-              this.state.storage[idx] = markdown.toHTML(component.markdown);
+              this.state.storage[idx] = marked(component.markdown);
               this.forceUpdate();
             }
           }
@@ -102,7 +112,7 @@ window.brio = function (id, opts) {
       console.log('getMarkdown', url);
       $.get(url)
         .success(function (data) {
-          this.state.storage[idx] = markdown.toHTML(data);
+          this.state.storage[idx] = marked(data);
           this.forceUpdate();
         }.bind(this))
         .fail(function (jqXHR) {
@@ -121,7 +131,7 @@ window.brio = function (id, opts) {
           if (type == 'function') {
             return (
               <div className='component' data-idx={idx}>
-                <Func func={component} key={idx} idx={idx}/>
+                <Func func={component} key={idx} idx={idx} highlight={highlight}/>
               </div>
             );
           }
@@ -156,7 +166,7 @@ window.brio = function (id, opts) {
 
   var App = React.createClass({
     getPageNames: function () {
-      return Object.keys(opts.pages);
+      return Object.keys(docs.pages);
     },
     componentDidMount: function () {
       window.onhashchange = function () {
@@ -176,11 +186,11 @@ window.brio = function (id, opts) {
       };
     },
     getCurrPageName: function () {
-      return this.state.hierarchy[0] || Object.keys(opts.pages)[0];
+      return this.state.hierarchy[0] || Object.keys(docs.pages)[0];
     },
     getCurrSection: function () {
       var name = this.getCurrPageName();
-      var section = opts.pages[name];
+      var section = docs.pages[name];
       var hierarchy = this.state.hierarchy;
 
       var clonedHierarchy = _.extend([], hierarchy);
@@ -203,7 +213,7 @@ window.brio = function (id, opts) {
       return {section: section, name: name, hierarchy: clonedHierarchy};
     },
     render: function () {
-      var pages = opts.pages,
+      var pages = docs.pages,
         currentPageName = this.getCurrPageName(),
         page = pages[currentPageName];
 
@@ -215,7 +225,7 @@ window.brio = function (id, opts) {
         <div>
           <div className="header">
             <h1>
-              <a href='#'>{opts.title}</a>
+              <a href='#'>{docs.title}</a>
             </h1>
             <ul>
               {Object.keys(pages).map(function (pageName, idx) {
@@ -225,7 +235,7 @@ window.brio = function (id, opts) {
                 }
                 return (
                   <li>
-                    <a href={'/#/' + pageName}
+                    <a href={'#/' + pageName}
                        className={className}
                        key={idx}
                        data-idx={idx}

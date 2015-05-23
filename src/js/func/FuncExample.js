@@ -25,6 +25,8 @@ var FuncExample = React.createClass({
     }
   },
   parseCode: function (code) {
+
+
     var raw = code.toString(),
       split = raw
         //.replace(REGEX_TAB, '')
@@ -32,9 +34,23 @@ var FuncExample = React.createClass({
         .split('\n'),
       numberedLogs = this.state.numberedLogs;
 
+
+    var highlight = this.props.highlight || function (c) {return c};
+
     var elements = [];
 
     if (split.length) {
+      var replace = '';
+      var firstLine = split[1];
+      for (i = 0;i<firstLine.length;i++) {
+        var char = firstLine[i];
+        if (char == ' ') {
+          replace += ' ';
+        }
+        else {
+          break;
+        }
+      }
       for (var i = 0; i < split.length; i++) {
         var lineNum = i + 1;
         var logs = numberedLogs[lineNum];
@@ -52,9 +68,14 @@ var FuncExample = React.createClass({
             var lineElements = [];
             for (var j = 0; j < l.length; j++) {
               var range = l[j];
-              var pre = line.slice(cursor, range[0]).replace('	      ', '');
-              lineElements.push(<span>{pre}</span>);
-              lineElements.push(<FuncLog val={logs[j]}>{line.slice(range[0], range[1])}</FuncLog>);
+              var pre = line.slice(cursor, range[0]).replace(replace, '');
+              html = highlight(pre);
+              lineElements.push(<span dangerouslySetInnerHTML={{__html: html}}/>);
+              lineElements.push((
+                <FuncLog val={logs[j]}
+                         highlight={highlight}
+                         content={line.slice(range[0], range[1])}/>
+              ));
               cursor = range[1];
             }
             elements.push(
@@ -69,7 +90,9 @@ var FuncExample = React.createClass({
           }
         }
         else {
-          elements.push(<div className="line">{split[i].replace('	      ', '')}</div>)
+          var html = highlight(split[i].replace(replace, ''));
+          elements.push(<div className="line"
+                             dangerouslySetInnerHTML={{__html: html}}/>)
         }
       }
       return elements.slice(1, elements.length - 1);
@@ -166,7 +189,7 @@ var FuncExample = React.createClass({
         </Row>
         <Row>
           <Col md="9">
-            <pre className="code">{parsedCode}</pre>
+            <pre className="code"><code className="lang-js">{parsedCode}</code></pre>
           </Col>
           <Col md="3" className="logs">
             <pre>{this.state.logs.map(function (l) {

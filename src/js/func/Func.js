@@ -22,10 +22,14 @@ var Func = React.createClass({
           var header = <span>Example #{idx + 1}: {example.name}</span>;
             return (
               <Panel header={header} eventKey={idx}>
-                <FuncExample example={example} func={func} idx={idx} key={idx}/>
+                <FuncExample example={example}
+                             func={func}
+                             highlight={this.props.highlight}
+                             idx={idx}
+                             key={idx}/>
               </Panel>
             );
-          })}
+          }.bind(this))}
         </Accordion>
       </div>
     )
