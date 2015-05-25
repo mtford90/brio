@@ -116,7 +116,6 @@ window.brio = function (opts) {
     },
     getMarkdown: function (md, idx) {
       var url = md.url;
-      console.log('getMarkdown', url);
       $.get(url)
         .success(function (data) {
           this.state.storage[idx] = marked(data);
