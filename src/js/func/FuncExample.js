@@ -15,7 +15,8 @@ var REGEX_DONE = /\t* *done\(\)( *);?/g,
 
 var FuncExample = React.createClass({
   componentDidMount: function () {
-    this.onRunButtonClicked();
+    var code = this.props.example.code;
+    this.execute(code);
   },
   getInitialState: function () {
     return {
@@ -25,8 +26,6 @@ var FuncExample = React.createClass({
     }
   },
   parseCode: function (code) {
-
-
     var raw = code.toString(),
       split = raw
         .replace(REGEX_DONE, '')
@@ -41,7 +40,7 @@ var FuncExample = React.createClass({
     if (split.length) {
       var replace = '';
       var firstLine = split[1];
-      for (i = 0;i<firstLine.length;i++) {
+      for (i = 0; i < firstLine.length; i++) {
         var char = firstLine[i];
         if (char == ' ') {
           replace += ' ';
@@ -125,12 +124,11 @@ var FuncExample = React.createClass({
       }
     }
   },
-  onRunButtonClicked: function () {
+  execute: function (code) {
     queue.push(function (done) {
       var logs = [];
       var numberedLogs = {};
       var oldConsoleLog = window.console.log;
-      var code = this.props.example.code;
       window.console.log = function () {
         var args = [];
         for (var i = 0; i < arguments.length; i++) {
@@ -200,6 +198,18 @@ var FuncExample = React.createClass({
 
       </div>
     )
+  },
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.example != this.props.example) {
+      this.setState({
+        logs: [],
+        numberedLogs: {},
+        lineNumbers: true
+      }, function () {
+        var code = nextProps.example.code;
+        this.execute(code);
+      }.bind(this));
+    }
   }
 });
 
