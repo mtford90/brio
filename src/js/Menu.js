@@ -9,12 +9,8 @@ var Menu = React.createClass({
         <ul>
           {sectionNames.map(function (name) {
             var href = path + '/' + name;
-            console.log('name', name);
-            console.log('name', name);
             var hierarchy = this.props.hierarchy;
-            console.log('hierarchy', hierarchy);
             var curr = hierarchy[depth];
-            console.log('curr', curr);
             var isActive = name == curr;
             return [
               (

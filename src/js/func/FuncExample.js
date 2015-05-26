@@ -26,6 +26,7 @@ var FuncExample = React.createClass({
     }
   },
   parseCode: function (code) {
+
     var raw = code.toString(),
       split = raw
         .replace(REGEX_DONE, '')
@@ -39,7 +40,12 @@ var FuncExample = React.createClass({
 
     if (split.length) {
       var replace = '';
-      var firstLine = split[1];
+      var firstLineIdx = 1;
+      var firstLine = split[firstLineIdx];
+      while (!firstLine.trim().length) {
+        firstLineIdx++;
+        firstLine = split[firstLineIdx];
+      }
       for (i = 0; i < firstLine.length; i++) {
         var char = firstLine[i];
         if (char == ' ') {
@@ -49,6 +55,8 @@ var FuncExample = React.createClass({
           break;
         }
       }
+
+
       for (var i = 0; i < split.length; i++) {
         var lineNum = i + 1;
         var logs = numberedLogs[lineNum];
@@ -117,11 +125,6 @@ var FuncExample = React.createClass({
         var split = row.split(':');
         return parseInt(split[split.length - 2]);
       }
-      else {
-        this.setState({
-          lineNumbers: false
-        })
-      }
     }
   },
   execute: function (code) {
@@ -141,6 +144,11 @@ var FuncExample = React.createClass({
             numberedLogs[n] = [];
           }
           numberedLogs[n].push(args);
+        }
+        else if (n === undefined) {
+          this.setState({
+            lineNumbers: false
+          })
         }
       }.bind(this);
       var fn;
