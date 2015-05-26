@@ -8,7 +8,7 @@ var queue = require('./queue'),
   FuncLog = require('./FuncLog');
 
 
-var REGEX_DONE = /done\(\)( *);?\n?/g,
+var REGEX_DONE = /\t* *done\(\)( *);?/g,
   REGEX_TAB = new RegExp('\t?!\n', 'g'),
   REGEX_CONSOLE_LOG = /console.log\([A-Za-z0-9 +-\\']*\)/g;
 
@@ -29,8 +29,7 @@ var FuncExample = React.createClass({
 
     var raw = code.toString(),
       split = raw
-        //.replace(REGEX_TAB, '')
-        //.replace(REGEX_DONE, '')
+        .replace(REGEX_DONE, '')
         .split('\n'),
       numberedLogs = this.state.numberedLogs;
 
