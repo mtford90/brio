@@ -46,16 +46,22 @@ var FuncExample = React.createClass({
         firstLineIdx++;
         firstLine = split[firstLineIdx];
       }
+
+
+      console.log('firstLine', firstLine);
+
       for (i = 0; i < firstLine.length; i++) {
         var char = firstLine[i];
-        if (char == ' ') {
-          replace += ' ';
+        console.log('char', '$' + char + '$');
+        if (char == ' ' || char == '\t') {
+          replace += char;
         }
         else {
           break;
         }
       }
 
+      console.log('replace', replace);
 
       for (var i = 0; i < split.length; i++) {
         var lineNum = i + 1;
@@ -74,7 +80,7 @@ var FuncExample = React.createClass({
             var lineElements = [];
             for (var j = 0; j < l.length; j++) {
               var range = l[j];
-              var pre = line.slice(cursor, range[0]).replace(replace, '');
+              var pre = line.slice(cursor, range[0]).replace(new RegExp(replace), '');
               html = highlight(pre);
               lineElements.push(<span dangerouslySetInnerHTML={{__html: html}}/>);
               lineElements.push((
@@ -153,15 +159,20 @@ var FuncExample = React.createClass({
       }.bind(this);
       var fn;
       eval('fn = ' + code);
-      //noinspection JSUnusedAssignment
-      fn(function () {
-        window.console.log = oldConsoleLog;
-        this.setState({
-          logs: logs,
-          numberedLogs: numberedLogs
-        });
-        done();
-      }.bind(this));
+      try {
+        //noinspection JSUnusedAssignment
+        fn(function () {
+          window.console.log = oldConsoleLog;
+          this.setState({
+            logs: logs,
+            numberedLogs: numberedLogs
+          });
+          done();
+        }.bind(this));
+      }
+      catch (e) {
+        console.error(e);
+      }
     }.bind(this));
 
   },
