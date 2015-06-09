@@ -141,3 +141,5 @@ gulp.task('dist', function () {
     'dist:css'
   )
 });
+
+gulp.task('default', ['watch']);
