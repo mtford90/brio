@@ -44,6 +44,17 @@ gulp.task('build:brio:js', function () {
 gulp.task('build:demo:js', function () {
   return gulp.src('demo/src/index.js')
     .pipe(plugins.webpack({
+      externals: {
+        'react': 'React',
+        'jQuery': '$',
+        'react-router': 'ReactRouter',
+        'underscore': '_',
+        'brio': 'brio',
+        'moment': 'moment',
+        'async': 'async',
+        'marked': 'marked',
+        'react-bootstrap': 'ReactBootstrap'
+      },
       devtool: 'inline-source-map',
       module: {
         loaders: [

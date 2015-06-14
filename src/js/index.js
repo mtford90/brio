@@ -5,6 +5,30 @@ var React = require('react'),
 var Menu = require('./Menu'),
   Content = require('./Content');
 
+var Brio = React.createClass({
+  getInitialState: function () {
+    return {global: {}}
+  },
+  render: function () {
+    return (
+      <div className="brio">
+        {this.props.children}
+      </div>
+    )
+  },
+  componentDidMount: function () {
+    var children = this.props.children || [];
+    React.Children.forEach(children, function (child) {
+      if (child.type instanceof Menu) {
+        child.props.onSelect = this.onSelect.bind(this);
+      }
+    }.bind(this));
+  },
+  onSelect: function (e) {
+    console.log('Menu item selected!');
+  }
+});
+
 window.brio = function (opts) {
   var {id, docs, highlight} = opts;
 
@@ -117,3 +141,7 @@ window.brio = function (opts) {
 
 };
 
+module.exports = window.brio = {
+  Brio: Brio,
+  Menu: Menu
+};

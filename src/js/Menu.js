@@ -33,7 +33,32 @@ var Menu = React.createClass({
         </div>
       </div>
     )
+  },
+
+});
+
+Menu = React.createClass({
+  getInitialState: function () {
+    return {
+
+    }
+  },
+  render: function () {
+    return (
+      <p>Menu!</p>
+    )
+  },
+  onSelect: function () {
+
+  },
+  getDefaultProps: function () {
+    return {
+      onSelect: function () {
+
+      }
+    };
   }
+
 });
 
 module.exports = Menu;
