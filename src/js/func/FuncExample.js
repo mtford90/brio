@@ -61,7 +61,6 @@ var FuncExample = React.createClass({
         }
       }
 
-      console.log('replace', replace);
 
       for (var i = 0; i < split.length; i++) {
         var lineNum = i + 1;

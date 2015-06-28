@@ -9,17 +9,22 @@ var FuncDef = require('./FuncDef'),
 
 var Func = React.createClass({
   render: function () {
-    var func = this.props.func,
-      examples = func.examples || [];
+    var {
+      name='',
+      def,
+      params,
+      description='',
+      examples=[]
+      } = this.props;
 
     return (
       <div className="func">
-        <FuncDef func={func}/>
-        <FuncDesc func={func}/>
+        <FuncDef name={name} params={params}/>
+        <FuncDesc description={description}/>
 
         <Accordion className="func-examples">
           {examples.map(function (example, idx) {
-          var header = <span>Example #{idx + 1}: {example.name}</span>;
+            var header = <span>Example #{idx + 1}: {example.name}</span>;
             return (
               <Panel header={header} eventKey={idx}>
                 <FuncExample example={example}

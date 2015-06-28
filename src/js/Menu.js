@@ -1,64 +1,46 @@
+var React = require('react');
+
 var Menu = React.createClass({
-  _renderSection: function (depth, path, section) {
-    if (_.isArray(section)) {
-      return ''
+  getInitialState: function () {
+    return {
+      menu: {}
     }
-    else {
-      var sectionNames = Object.keys(section);
-      return (
-        <ul>
-          {sectionNames.map(function (name) {
-            var href = path + '/' + name;
-            var hierarchy = this.props.hierarchy;
-            var curr = hierarchy[depth];
-            var isActive = name == curr;
-            return [
-              (
-                <li>
-                  {isActive ? {name} : <a href={href}>{name}</a>}
-                </li>
-              ),
-              this._renderSection(depth + 1, href, section[name])
-            ];
-          }.bind(this))}
-        </ul>
-      )
-    }
+  },
+  renderSection: function (menu) {
+    return (
+      <ul>
+        {Object.keys(menu).map(function (name) {
+          var section = menu[name];
+          console.log('section', section);
+          return (
+            <li>
+              <a href='#'>{name}</a>
+              {Object.keys(section.sections).length ? this.renderSection(section.sections) : ''}
+            </li>
+          )
+        }.bind(this))}
+      </ul>
+    );
   },
   render: function () {
     return (
-      <div className="menu-bar">
+      <div id="menu-bar" className="menu-bar">
         <div className="menu">
-          {this._renderSection(1, '#/' + this.props.pageName, this.props.page)}
+          {this.renderSection(this.state.menu)}
         </div>
       </div>
     )
   },
-
-});
-
-Menu = React.createClass({
-  getInitialState: function () {
-    return {
-
-    }
-  },
-  render: function () {
-    return (
-      <p>Menu!</p>
-    )
-  },
-  onSelect: function () {
-
-  },
-  getDefaultProps: function () {
-    return {
-      onSelect: function () {
-
-      }
-    };
+  componentDidMount: function () {
+    var domNode = this.getDOMNode();
+    // HACK: Allow parent element (Brio) to generate a menu based on it's Content child.
+    // If there is another way to do this I would love to hear about it.
+    domNode.configureMenu = function (menu) {
+      this.setState({
+        menu: menu
+      })
+    }.bind(this);
   }
-
 });
 
 module.exports = Menu;

@@ -4,9 +4,10 @@ var FuncParam = require('./FuncParam');
 
 var FuncDef = React.createClass({
   render: function () {
-    var func = this.props.func,
-      name = func.name,
-      params = func.parameters,
+    var {
+        name,
+        params
+        } = this.props,
       paramNames = Object.keys(params),
       numParams = paramNames.length;
 
