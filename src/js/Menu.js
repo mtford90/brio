@@ -7,20 +7,24 @@ var Menu = React.createClass({
     }
   },
   renderSection: function (menu) {
+    var location = window.location.hash.slice(1);
     return (
       <ul>
         {Object.keys(menu).map(function (name) {
           var section = menu[name];
-          console.log('section', section);
+          var selected = location.startsWith(section.path);
           return (
             <li>
-              <a href='#'>{name}</a>
+              {selected ? {name} : <a data-name={name} data-path={section.path} onClick={this.onClick}>{name}</a>}
               {Object.keys(section.sections).length ? this.renderSection(section.sections) : ''}
             </li>
           )
         }.bind(this))}
       </ul>
     );
+  },
+  onClick: function (e) {
+    window.location.hash = $(e.target).attr('data-path');
   },
   render: function () {
     return (
@@ -38,8 +42,10 @@ var Menu = React.createClass({
     domNode.configureMenu = function (menu) {
       this.setState({
         menu: menu
-      })
+      });
     }.bind(this);
+
+    $(window).on('hashchange', this.forceUpdate.bind(this));
   }
 });
 

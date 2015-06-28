@@ -18,15 +18,17 @@ var Brio = React.createClass({
     var menuBar = $(this.getDOMNode()).find('#menu-bar')[0];
     menuBar.configureMenu(menuData);
   },
-  _constructMenu: function (d, $sections) {
+  _constructMenu: function (d, $sections, path) {
     var self = this;
     $sections.each(function () {
       var $section = $(this);
       console.log('$section', $section);
       var name = $section.attr('data-name');
+      var newPath = path + '/' + name;
       d[name] = {
         name: name,
-        sections: self._constructMenu({}, $section.children('.section'))
+        path: newPath,
+        sections: self._constructMenu({}, $section.children('.section'), newPath)
       }
     });
     return d;
@@ -36,7 +38,7 @@ var Brio = React.createClass({
       $content = $domNode.find('.content'),
       $section = $content.children('.section');
 
-    return this._constructMenu({}, $section);
+    return this._constructMenu({}, $section, '');
   }
 });
 
