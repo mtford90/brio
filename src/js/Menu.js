@@ -1,18 +1,51 @@
 var React = require('react');
 
+var location = require('./location.js');
+
+
 var Menu = React.createClass({
   getInitialState: function () {
     return {
       menu: {}
     }
   },
+  resolve: function (section) {
+    console.log('section', section);
+    var subSectionNames = Object.keys(section.sections);
+    while (subSectionNames.length) {
+      var sections = section.sections;
+      if (sections) {
+        section = sections[subSectionNames[0]];
+        subSectionNames = Object.keys(section.sections);
+      }
+      else {
+        subSectionNames = [];
+      }
+    }
+    return section;
+  },
+  //getLocation: function () {
+  //  var sliced = window.location.hash.slice(2);
+  //  if (sliced) {
+  //    var location = sliced.split('/');
+  //    console.log('location', location);
+  //  }
+  //  else {
+  //    var topLevelSectionNames = Object.keys(this.state.menu);
+  //    if (topLevelSectionNames.length) {
+  //      var firstSectionName = topLevelSectionNames[0];
+  //      var s = this.resolve(this.state.menu[firstSectionName]);
+  //      console.log('s', s);
+  //    }
+  //  }
+  //  return window.location.hash.slice(1);
+  //},
   renderSection: function (menu) {
-    var location = window.location.hash.slice(1);
     return (
       <ul>
         {Object.keys(menu).map(function (name) {
           var section = menu[name];
-          var selected = location.startsWith(section.path);
+          var selected = location.pathSelected(section.path);
           return (
             <li>
               {selected ? {name} : <a data-name={name} data-path={section.path} onClick={this.onClick}>{name}</a>}
@@ -27,10 +60,12 @@ var Menu = React.createClass({
     window.location.hash = $(e.target).attr('data-path');
   },
   render: function () {
+    var menu = this.state.menu;
+    console.log('menu', menu);
     return (
       <div id="menu-bar" className="menu-bar">
         <div className="menu">
-          {this.renderSection(this.state.menu)}
+          {this.renderSection(menu)}
         </div>
       </div>
     )
@@ -45,7 +80,9 @@ var Menu = React.createClass({
       });
     }.bind(this);
 
-    $(window).on('hashchange', this.forceUpdate.bind(this));
+    $(window).on('hashchange', function () {
+      this.forceUpdate();
+    }.bind(this));
   }
 });
 

@@ -4,7 +4,7 @@ var Menu = require('./Menu');
 
 var Brio = React.createClass({
   getInitialState: function () {
-    return {global: {}}
+    return {}
   },
   render: function () {
     return (
@@ -22,7 +22,6 @@ var Brio = React.createClass({
     var self = this;
     $sections.each(function () {
       var $section = $(this);
-      console.log('$section', $section);
       var name = $section.attr('data-name');
       var newPath = path + '/' + name;
       d[name] = {

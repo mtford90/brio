@@ -27,7 +27,6 @@
     "react": "^0.13.3",
     "react-bootstrap": "^0.22.3",
     "react-router": "^0.13.3",
-    "siesta-orm": "^0.1.46",
     "stacktrace-js": "^0.6.4",
     "underscore": "^1.8.3"
   },
