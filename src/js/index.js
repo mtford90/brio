@@ -23,9 +23,6 @@ var Header = React.createClass({
   }
 });
 
-
-
-
 module.exports = window.brio = {
   Brio: Brio,
   Menu: Menu,

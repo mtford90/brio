@@ -24,22 +24,7 @@ var Menu = React.createClass({
     }
     return section;
   },
-  //getLocation: function () {
-  //  var sliced = window.location.hash.slice(2);
-  //  if (sliced) {
-  //    var location = sliced.split('/');
-  //    console.log('location', location);
-  //  }
-  //  else {
-  //    var topLevelSectionNames = Object.keys(this.state.menu);
-  //    if (topLevelSectionNames.length) {
-  //      var firstSectionName = topLevelSectionNames[0];
-  //      var s = this.resolve(this.state.menu[firstSectionName]);
-  //      console.log('s', s);
-  //    }
-  //  }
-  //  return window.location.hash.slice(1);
-  //},
+
   renderSection: function (menu) {
     return (
       <ul>

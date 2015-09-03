@@ -9,7 +9,6 @@ function getLocation() {
 
 function pathSelected(path) {
   var location = getLocation();
-  console.log('location', location);
   return location.startsWith(path);
 }
 
