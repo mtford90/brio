@@ -46,7 +46,6 @@ var Menu = React.createClass({
   },
   render: function () {
     var menu = this.state.menu;
-    console.log('menu', menu);
     return (
       <div id="menu-bar" className="menu-bar">
         <div className="menu">

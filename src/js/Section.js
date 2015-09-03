@@ -17,13 +17,12 @@ var Section = React.createClass({
   constructPath: function () {
     var $node = $(this.getDOMNode());
     var path = '/' + this.props.name;
-    console.log('path', path);
     while ($node.length) {
-      console.log('$node', $node);
       $node = $node.parents('.section');
       var name = $node.attr('data-name');
-      if ($node.length)
+      if ($node.length) {
         path = '/' + name + path;
+      }
     }
     $(this.getDOMNode()).attr('data-path', path);
     this.setState({

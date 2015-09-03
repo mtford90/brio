@@ -68,6 +68,13 @@ var SiestaDocumentation = React.createClass({
               <Markdown/>
               <FuncExample/>
             </Section>
+            <Section name='Something Else Again'>
+              <h1>ABC</h1>
+
+              <p>123</p>
+
+              <FuncExample/>
+            </Section>
           </Section>
           <Section name='Another Thang'>
             <h1>Another Title</h1>
