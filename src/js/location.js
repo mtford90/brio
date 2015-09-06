@@ -9,10 +9,13 @@ function getLocation() {
 
 function pathSelected(path) {
   var location = getLocation();
-  path = path.split('/');
+  if (!Array.isArray(path))
+    path = path.split('/');
   location = location.split('/');
-  for (var i=0;i<path.length;i++) {
-    if (path[i] == location[i]) {
+  for (var i = 0; i < path.length; i++) {
+    var path1 = path[i];
+    var path2 = location[i];
+    if (path1 == path2) {
       continue;
     }
     return false;
@@ -20,7 +23,19 @@ function pathSelected(path) {
   return true;
 }
 
+function pathSelectedExactly(path) {
+  var location = getLocation();
+  if (!Array.isArray(path))
+    path = path.split('/');
+  location = location.split('/');
+  if (path.length == location.length) {
+    return pathSelected(path);
+  }
+  return false;
+}
+
 module.exports = {
   getLocation: getLocation,
-  pathSelected: pathSelected
+  pathSelected: pathSelected,
+  pathSelectedExactly: pathSelectedExactly,
 };

@@ -7,7 +7,10 @@ var Section = React.createClass({
     return {path: ''}
   },
   render: function () {
-    var shouldShow = location.pathSelected(this.state.path);
+    var path = this.state.path;
+    var shouldShow = location.pathSelected(path);
+    console.log('path', path);
+    console.log('shouldShow', shouldShow);
     return (
       <div className="section" data-name={this.props.name} data-show={this.state.show}>
         {shouldShow ? this.props.children : ''}
@@ -31,7 +34,12 @@ var Section = React.createClass({
   },
   componentDidMount: function () {
     var hashHandler = function () {
-      this.constructPath();
+      console.log(this);
+      // Bit of a hack tbh. The $.off in componentWillUnmount should ensure that no unmounted components attempt to
+      // construct the path but it does sometimes get called.
+      if (this.isMounted()) {
+        this.constructPath();
+      }
     }.bind(this);
     $(window).on('hashchange', hashHandler);
     this.hashHandler = hashHandler;

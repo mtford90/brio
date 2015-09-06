@@ -10,7 +10,6 @@ var Menu = React.createClass({
     }
   },
   resolve: function (section) {
-    console.log('section', section);
     var subSectionNames = Object.keys(section.sections);
     while (subSectionNames.length) {
       var sections = section.sections;
@@ -30,7 +29,7 @@ var Menu = React.createClass({
       <ul>
         {Object.keys(menu).map(function (name) {
           var section = menu[name];
-          var selected = location.pathSelected(section.path);
+          var selected = location.pathSelectedExactly(section.path);
           return (
             <li>
               {selected ? {name} : <a data-name={name} data-path={section.path} onClick={this.onClick}>{name}</a>}
