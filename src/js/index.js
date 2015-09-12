@@ -2,7 +2,7 @@ var React = require('react'),
   _ = require('underscore'),
   marked = require('marked');
 
-var Menu = require('./Menu'),
+var SideMenu = require('./SideMenu'),
   Content = require('./Content'),
   Brio = require('./Brio'),
   Section = require('./Section'),
@@ -25,7 +25,7 @@ var Header = React.createClass({
 
 module.exports = window.brio = {
   Brio: Brio,
-  Menu: Menu,
+  SideMenu: SideMenu,
   Content: Content,
   Markdown: Markdown,
   Section: Section,

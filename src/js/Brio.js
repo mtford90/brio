@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Menu = require('./Menu');
+import SideMenu from './SideMenu';
 
 var Brio = React.createClass({
   getInitialState: function () {

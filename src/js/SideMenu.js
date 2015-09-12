@@ -1,15 +1,13 @@
-var React = require('react');
+import React from 'react';
+import location from './location';
 
-var location = require('./location.js');
+export default class SideMenu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {menu: {}}
+  }
 
-
-var Menu = React.createClass({
-  getInitialState: function () {
-    return {
-      menu: {}
-    }
-  },
-  resolve: function (section) {
+  resolve(section) {
     var subSectionNames = Object.keys(section.sections);
     while (subSectionNames.length) {
       var sections = section.sections;
@@ -22,9 +20,9 @@ var Menu = React.createClass({
       }
     }
     return section;
-  },
+  }
 
-  renderSection: function (menu) {
+  renderSection(menu) {
     return (
       <ul>
         {Object.keys(menu).map(function (name) {
@@ -41,11 +39,13 @@ var Menu = React.createClass({
         }.bind(this))}
       </ul>
     );
-  },
-  onClick: function (e) {
+  }
+
+  onClick(e) {
     window.location.hash = $(e.target).attr('data-path');
-  },
-  render: function () {
+  }
+
+  render() {
     var menu = this.state.menu;
     return (
       <div id="menu-bar" className="menu-bar">
@@ -54,9 +54,11 @@ var Menu = React.createClass({
         </div>
       </div>
     )
-  },
-  componentDidMount: function () {
-    var domNode = this.getDOMNode();
+  }
+
+  componentDidMount() {
+    console.log(this);
+    var domNode = React.findDOMNode(this);
     // HACK: Allow parent element (Brio) to generate a menu based on it's Content child.
     // If there is another way to do this I would love to hear about it.
     domNode.configureMenu = function (menu) {
@@ -69,6 +71,4 @@ var Menu = React.createClass({
       this.forceUpdate();
     }.bind(this));
   }
-});
-
-module.exports = Menu;
+}

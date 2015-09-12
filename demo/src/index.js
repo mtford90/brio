@@ -23,7 +23,7 @@ var React = require('react');
 
 var {
   Brio,
-  Menu,
+  SideMenu,
   Header,
   Content,
   Func,
@@ -57,7 +57,7 @@ var SiestaDocumentation = React.createClass({
     return (
       <Brio>
         <Header/>
-        <Menu/>
+        <SideMenu/>
         <Content>
           <Section name='Something'>
             <Section name='Something Else'>
