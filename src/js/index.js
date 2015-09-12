@@ -4,6 +4,7 @@ var React = require('react'),
 
 var SideMenu = require('./SideMenu'),
   Content = require('./Content'),
+  NavBarMenu = require('./NavBarMenu'),
   Brio = require('./Brio'),
   Section = require('./Section'),
   Markdown = require('./Markdown');
@@ -16,8 +17,7 @@ var Header = React.createClass({
         <h1>
           <a href='#'>Brio</a>
         </h1>
-        <ul>
-        </ul>
+        <NavBarMenu/>
       </div>
     );
   }

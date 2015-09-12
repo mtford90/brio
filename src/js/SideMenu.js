@@ -57,7 +57,6 @@ export default class SideMenu extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this);
     var domNode = React.findDOMNode(this);
     // HACK: Allow parent element (Brio) to generate a menu based on it's Content child.
     // If there is another way to do this I would love to hear about it.
