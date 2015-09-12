@@ -6,14 +6,28 @@ var Section = React.createClass({
   getInitialState: function () {
     return {path: ''}
   },
+  pathSelected: function (_path) {
+    var path = _path || this.state.path;
+    var loc = location.getLocation().split('/');
+    path = path.split('/');
+
+    for (var i = 0; i < Math.min(loc.length, path.length); i++) {
+      if (path[i] == loc[i]) continue;
+      return false;
+    }
+    return true;
+  },
   render: function () {
-    var path = this.state.path;
-    var shouldShow = location.pathSelected(path);
-    console.log('path', path);
-    console.log('shouldShow', shouldShow);
+    var style = {};
+    if (!this.state.shouldShow) {
+      style.display = 'none';
+    }
     return (
-      <div className="section" data-name={this.props.name} data-show={this.state.show}>
-        {shouldShow ? this.props.children : ''}
+      <div className="section"
+           data-name={this.props.name}
+           data-show={this.state.shouldShow}
+           style={style}>
+        {this.props.children}
       </div>
     );
   },
@@ -29,16 +43,20 @@ var Section = React.createClass({
     }
     $(this.getDOMNode()).attr('data-path', path);
     this.setState({
-      path: path
-    })
+      path: path,
+      shouldShow: this.pathSelected(path)
+    });
+  },
+  shouldShow: function () {
+    this.setState({shouldShow: this.pathSelected()});
   },
   componentDidMount: function () {
+    this.constructPath();
     var hashHandler = function () {
-      console.log(this);
       // Bit of a hack tbh. The $.off in componentWillUnmount should ensure that no unmounted components attempt to
       // construct the path but it does sometimes get called.
       if (this.isMounted()) {
-        this.constructPath();
+        this.shouldShow();
       }
     }.bind(this);
     $(window).on('hashchange', hashHandler);

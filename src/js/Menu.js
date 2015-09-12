@@ -30,6 +30,8 @@ var Menu = React.createClass({
         {Object.keys(menu).map(function (name) {
           var section = menu[name];
           var selected = location.pathSelectedExactly(section.path);
+          console.log('name', name);
+          console.log('section.sections', section.sections);
           return (
             <li>
               {selected ? {name} : <a data-name={name} data-path={section.path} onClick={this.onClick}>{name}</a>}

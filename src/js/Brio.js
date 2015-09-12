@@ -14,11 +14,10 @@ var Brio = React.createClass({
     )
   },
   componentDidMount: function () {
+    // Fake hashchange event so that the sections can configure themselves.
     var menuData = this.constructMenu();
     var menuBar = $(this.getDOMNode()).find('#menu-bar')[0];
     menuBar.configureMenu(menuData);
-    // Fake hashchange event so that the sections can configure themselves.
-    $(window).trigger('hashchange');
   },
   _constructMenu: function (d, $sections, path) {
     var self = this;
