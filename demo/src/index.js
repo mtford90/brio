@@ -1,36 +1,5 @@
-//var React = require('react'),
-//  {Brio, Menu, Content} = require('brio');
-//
-//
-//var SiestaDocumentation = React.createClass({
-//  render: function () {
-//    return (
-//      <Brio>
-//        <Menu/>
-//        <Content>
-//          {require('./documentation')}
-//          {require('./guide')}
-//        </Content>
-//      </Brio>
-//    )
-//  }
-//});
-//
-//
-
-
-var React = require('react');
-
-var {
-  Brio,
-  SideMenu,
-  Header,
-  Content,
-  Func,
-  Section,
-  Markdown
-  } = require('brio');
-
+import React from 'react';
+import {Brio, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
 
 var FuncExample = React.createClass({
   render: function () {
@@ -59,6 +28,7 @@ var SiestaDocumentation = React.createClass({
         <Header/>
         <SideMenu/>
         <Content>
+
           <Section name='Something'>
             <Section name='Something Else'>
               <h1>A title</h1>

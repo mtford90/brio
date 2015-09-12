@@ -1,34 +1,13 @@
-var React = require('react'),
-  _ = require('underscore'),
-  marked = require('marked');
-
-var SideMenu = require('./SideMenu'),
-  Content = require('./Content'),
-  NavBarMenu = require('./NavBarMenu'),
-  Brio = require('./Brio'),
-  Section = require('./Section'),
-  Markdown = require('./Markdown');
+import SideMenu from './SideMenu';
+import Content from './Content';
+import Brio from './Brio';
+import Func from './Func';
+import Section from './Section';
+import Markdown from './Markdown';
+import Header from './Header';
 
 
-var Header = React.createClass({
-  render: function () {
-    return (
-      <div className="header">
-        <h1>
-          <a href='#'>Brio</a>
-        </h1>
-        <NavBarMenu/>
-      </div>
-    );
-  }
-});
 
-module.exports = window.brio = {
-  Brio: Brio,
-  SideMenu: SideMenu,
-  Content: Content,
-  Markdown: Markdown,
-  Section: Section,
-  Header: Header,
-  Func: require('./func/Func')
-};
+export {Brio, SideMenu, Content, Markdown, Section, Header, Func};
+
+window.brio = exports;
