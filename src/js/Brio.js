@@ -16,18 +16,18 @@ export default class Brio extends React.Component {
   }
 
   componentDidMount() {
-    var menuData = this.constructMenu();
-    var $this = $(React.findDOMNode(this));
-    var menuBar = $this.find('#menu-bar')[0];
+    let menuData = this.constructMenu(),
+      $this = $(React.findDOMNode(this)),
+      menuBar = $this.find('#menu-bar')[0];
     menuBar.configureMenu(menuData);
   }
 
   _constructMenu(d, $sections, path) {
-    var self = this;
+    let self = this;
     $sections.each(function () {
-      var $section = $(this);
-      var name = $section.attr('data-name');
-      var newPath = path + '/' + name;
+      let $section = $(this),
+        name = $section.attr('data-name'),
+        newPath = path + '/' + name;
       d[name] = {
         name: name,
         path: newPath,
