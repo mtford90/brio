@@ -1,25 +1,28 @@
-var React = require('react');
-
+import React from 'react';
 import SideMenu from './SideMenu';
 
-var Brio = React.createClass({
-  getInitialState: function () {
-    return {}
-  },
-  render: function () {
+export default class Brio extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
     return (
       <div className="brio">
         {this.props.children}
       </div>
     )
-  },
-  componentDidMount: function () {
-    // Fake hashchange event so that the sections can configure themselves.
+  }
+
+  componentDidMount() {
     var menuData = this.constructMenu();
-    var menuBar = $(this.getDOMNode()).find('#menu-bar')[0];
+    var $this = $(React.findDOMNode(this));
+    var menuBar = $this.find('#menu-bar')[0];
     menuBar.configureMenu(menuData);
-  },
-  _constructMenu: function (d, $sections, path) {
+  }
+
+  _constructMenu(d, $sections, path) {
     var self = this;
     $sections.each(function () {
       var $section = $(this);
@@ -32,14 +35,13 @@ var Brio = React.createClass({
       }
     });
     return d;
-  },
-  constructMenu: function () {
-    var $domNode = $(this.getDOMNode()),
+  }
+
+  constructMenu() {
+    var $domNode = $(React.findDOMNode(this)),
       $content = $domNode.find('.content'),
       $section = $content.children('.section');
 
     return this._constructMenu({}, $section, '');
   }
-});
-
-module.exports = Brio;
+}
