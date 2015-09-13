@@ -35,7 +35,6 @@ var SiestaDocumentation = React.createClass({
 
                 <p>This section is about something</p>
 
-                <Markdown/>
                 <FuncExample/>
               </Section>
               <Section name='Something Else Again'>
@@ -50,7 +49,6 @@ var SiestaDocumentation = React.createClass({
               <h1>Another Title</h1>
 
               <p>This section is also about something...</p>
-              <Markdown/>
             </Section>
           </Page>
           <Page name='Guide'>
