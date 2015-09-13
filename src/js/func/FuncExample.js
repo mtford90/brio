@@ -115,16 +115,20 @@ export default class FuncExample extends React.Component {
    * we fall back to display sequential log display, much like javascript dev console.
    * @returns {*}
    */
-  getLineNumber() {
+  getLocation() {
     var data = printStackTrace();
     console.info('data', data);
     for (var i = 0; i < data.length; i++) {
       var row = data[i];
       var chrome = row.indexOf('eval at <anonymous>') > -1;
       var firefox = row.indexOf('code') > -1 && row.indexOf('eval') > -1;
+      console.error('row', row);
       if (chrome || firefox) {
         var split = row.split(':');
-        return parseInt(split[split.length - 2]);
+        console.error('split', split);
+        var lineNumber = parseInt(split[split.length - 2]);
+        var rowNumber = parseInt(split[split.length - 1]);
+        return {lineNumber: lineNumber, rowNumber: rowNumber};
       }
     }
   }
@@ -140,15 +144,19 @@ export default class FuncExample extends React.Component {
           args.push(arguments[i]);
         }
         logs.push(args);
-        var n = this.getLineNumber();
-        if (n) {
-          if (!numberedLogs[n]) {
-            numberedLogs[n] = [];
+        var {lineNumber, rowNumber} = this.getLocation();
+
+        oldConsoleLog('lineNumber', lineNumber);
+        oldConsoleLog('rowNumber', rowNumber);
+
+        if (lineNumber) {
+          if (!numberedLogs[lineNumber]) {
+            numberedLogs[lineNumber] = [];
           }
-          numberedLogs[n].push(args);
+          numberedLogs[lineNumber].push(args);
 
         }
-        else if (n === undefined) {
+        else if (lineNumber === undefined) {
           this.setState({
             lineNumbers: false
           })
