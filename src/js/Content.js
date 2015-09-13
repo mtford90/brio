@@ -2,6 +2,7 @@ var React = require('react'),
   _ = require('underscore'),
   marked = require('marked');
 
+import {homePageSelected} from './util';
 
 //getMarkdown: function (md, idx) {
 //  var url = md.url;
@@ -19,15 +20,26 @@ var Func = require('./func/Func'),
   Content = React.createClass({
     getInitialState: function () {
       return {
-        storage: {}
+        homePageSelected: false
       }
     },
     componentDidMount: function () {
+      this.hashChange = () => {
+        this.setState({
+          homePageSelected: homePageSelected()
+        })
+      };
+      this.hashChange();
+      $(window).on('hashchange', this.hashChange);
+    },
 
+    componentWillUnmount: function () {
+      $(window).off('hashchange', this.hashChange);
     },
     render: function () {
+      var className = this.state.homePageSelected ? 'home-page-selected' : '';
       return (
-        <div className="content-wrapper">
+        <div className={"content-wrapper " + className}>
           <div className="content">
             {this.props.children}
           </div>

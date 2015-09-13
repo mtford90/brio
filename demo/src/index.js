@@ -1,5 +1,5 @@
 import React from 'react';
-import {Brio, Page, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
+import {Brio, Page, HomePage, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
 
 var FuncExample = React.createClass({
   render: function () {
@@ -28,6 +28,10 @@ var SiestaDocumentation = React.createClass({
         <Header/>
         <SideMenu/>
         <Content>
+          <HomePage>
+            <h1>Brio Example</h1>
+            <p>Welcome to the example Brio documentation. Choose a page to get started</p>
+          </HomePage>
           <Page name='Documentation'>
             <Section name='Something'>
               <Section name='Something Else'>

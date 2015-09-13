@@ -123,6 +123,10 @@ $content-padding: 30px;
   padding-left: $menu-bar-width + $content-padding;
   padding-top: 30px;
 
+  &.home-page-selected {
+    padding-left: $content-padding;
+  }
+
   .content {
     padding-right: $content-padding;
     padding-bottom: 40px;

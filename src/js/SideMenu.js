@@ -1,6 +1,9 @@
 import React from 'react';
 import location from './location';
 
+import {homePageSelected} from './util';
+
+
 export default class SideMenu extends React.Component {
   constructor(props) {
     super(props);
@@ -45,8 +48,9 @@ export default class SideMenu extends React.Component {
 
   render() {
     var menu = this.state.menu;
+    var style = homePageSelected() ? {display: 'none'} : {};
     return (
-      <div id="menu-bar" className="menu-bar">
+      <div id="menu-bar" className="menu-bar" style={style}>
         <div className="menu">
           {this.renderSection(menu)}
         </div>
@@ -64,8 +68,11 @@ export default class SideMenu extends React.Component {
       });
     }.bind(this);
 
-    $(window).on('hashchange', function () {
-      this.forceUpdate();
-    }.bind(this));
+    this.hashChange = () => {this.forceUpdate()};
+    $(window).on('hashchange', this.hashChange);
+  }
+
+  componentWillUnmount() {
+    $(window).off('hashchange', this.hashChange);
   }
 }

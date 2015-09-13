@@ -34,7 +34,9 @@ export default class Brio extends React.Component {
 
     var pageNames = [];
     $this.find('.page').each(function () {
-      pageNames.push($(this).attr('data-name'));
+      let $this = $(this);
+      if (!$this.hasClass('home-page'))
+        pageNames.push($this.attr('data-name'));
     });
 
     navMenu.configureMenu(pageNames);
