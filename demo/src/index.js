@@ -1,8 +1,8 @@
 import React from 'react';
 import {Brio, Page, HomePage, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
 
-var FuncExample = React.createClass({
-  render: function () {
+class FuncExample extends React.Component {
+  render () {
     var def = function (blah) {
         console.log('yo!', blah);
       },
@@ -19,10 +19,10 @@ var FuncExample = React.createClass({
                  params={params}
                  description={description}/>
   }
-});
+}
 
-var SiestaDocumentation = React.createClass({
-  render: function () {
+class Docs extends React.Component {
+  render () {
     return (
       <Brio>
         <Header/>
@@ -62,6 +62,6 @@ var SiestaDocumentation = React.createClass({
       </Brio>
     )
   }
-});
+}
 
-React.render(<SiestaDocumentation/>, document.getElementById('app'));
+React.render(<Docs/>, document.getElementById('app'));
