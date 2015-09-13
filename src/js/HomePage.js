@@ -1,5 +1,6 @@
 import React from 'react';
 import location from './location';
+import {homePageSelected} from './util';
 
 export default class HomePage extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ export default class HomePage extends React.Component {
 
   render() {
     let hash = window.location.hash,
-      isSelected = hash == '#' || hash == '#/' || hash == '' || hash == '/',
+      isSelected = homePageSelected(),
       style = isSelected ? {} : {'display': 'none'};
     return (
       <div className="page home-page"

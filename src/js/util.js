@@ -1,3 +1,7 @@
 export function homePageSelected() {
-  return $('.home-page').attr('data-selected') == 'true';
+  return window.location.hash == '' || window.location.hash == '/';
+}
+
+export function homePageExists() {
+  return !!$('.home-page').length;
 }

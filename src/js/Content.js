@@ -2,7 +2,8 @@ var React = require('react'),
   _ = require('underscore'),
   marked = require('marked');
 
-import {homePageSelected} from './util';
+import {homePageSelected, homePageExists} from './util';
+import DefaultHomePage from './DefaultHomePage';
 
 //getMarkdown: function (md, idx) {
 //  var url = md.url;
@@ -16,36 +17,42 @@ import {homePageSelected} from './util';
 //    });
 //},
 
-var Func = require('./func/Func'),
-  Content = React.createClass({
-    getInitialState: function () {
-      return {
-        homePageSelected: false
-      }
-    },
-    componentDidMount: function () {
-      this.hashChange = () => {
-        this.setState({
-          homePageSelected: homePageSelected()
-        })
-      };
-      this.hashChange();
-      $(window).on('hashchange', this.hashChange);
-    },
 
-    componentWillUnmount: function () {
-      $(window).off('hashchange', this.hashChange);
-    },
-    render: function () {
-      var className = this.state.homePageSelected ? 'home-page-selected' : '';
-      return (
-        <div className={"content-wrapper " + className}>
-          <div className="content">
-            {this.props.children}
-          </div>
-        </div>
-      )
+var Func = require('./func/Func');
+
+
+
+var Content = React.createClass({
+  getInitialState: function () {
+    return {
+      homePageSelected: false
     }
-  });
+  },
+  componentDidMount: function () {
+    this.hashChange = () => {
+      this.setState({
+        homePageSelected: homePageSelected()
+      })
+    };
+    this.hashChange();
+    $(window).on('hashchange', this.hashChange);
+  },
+
+  componentWillUnmount: function () {
+    $(window).off('hashchange', this.hashChange);
+  },
+  render: function () {
+    var homePageSelected = this.state.homePageSelected;
+    var className = homePageSelected ? 'home-page-selected' : '';
+    return (
+      <div className={"content-wrapper " + className}>
+        <div className="content">
+          {homePageExists() ? '' : <DefaultHomePage/>}
+          {this.props.children}
+        </div>
+      </div>
+    )
+  }
+});
 
 module.exports = Content;
