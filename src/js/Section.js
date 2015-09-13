@@ -1,12 +1,14 @@
-var React = require('react');
+import React from 'react';
+import location from './location';
 
-var location = require('./location');
 
-var Section = React.createClass({
-  getInitialState: function () {
-    return {path: ''}
-  },
-  pathSelected: function (_path) {
+export default class Section extends React.Component {
+  constructor(props) {
+    super (props);
+    this.state = {path: ''};
+  }
+
+   pathSelected (_path) {
     var path = _path || this.state.path;
     var loc = location.getLocation().split('/');
     path = path.split('/');
@@ -16,8 +18,9 @@ var Section = React.createClass({
       return false;
     }
     return true;
-  },
-  render: function () {
+  }
+
+  render () {
     var style = {};
     if (!this.state.shouldShow) {
       style.display = 'none';
@@ -30,9 +33,10 @@ var Section = React.createClass({
         {this.props.children}
       </div>
     );
-  },
-  constructPath: function () {
-    var $node = $(this.getDOMNode());
+  }
+
+  constructPath () {
+    var $node = $(React.findDOMNode(this));
     var path = '/' + this.props.name;
     while ($node.length) {
       $node = $node.parents('.section,.page');
@@ -40,30 +44,25 @@ var Section = React.createClass({
       if ($node.length)  path = '/' + name + path;
 
     }
-    $(this.getDOMNode()).attr('data-path', path);
+    $node.attr('data-path', path);
     this.setState({
       path: path,
       shouldShow: this.pathSelected(path)
     });
-  },
-  shouldShow: function () {
+  }
+
+  shouldShow () {
     this.setState({shouldShow: this.pathSelected()});
-  },
-  componentDidMount: function () {
+  }
+
+  componentDidMount () {
     this.constructPath();
-    var hashHandler = function () {
-      // Bit of a hack tbh. The $.off in componentWillUnmount should ensure that no unmounted components attempt to
-      // construct the path but it does sometimes get called.
-      if (this.isMounted()) {
-        this.shouldShow();
-      }
-    }.bind(this);
-    $(window).on('hashchange', hashHandler);
-    this.hashHandler = hashHandler;
-  },
-  componentWillUnmount: function () {
+    this.hashHandler = () => {this.shouldShow()};
+    $(window).on('hashchange', this.hashHandler);
+  }
+
+  componentWillUnmount () {
     $(window).off('hashchange', this.hashHandler);
   }
-});
+}
 
-module.exports = Section;
