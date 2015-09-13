@@ -1,7 +1,7 @@
-var React = require('react');
+import React from 'react';
 
-var FuncParam = React.createClass({
-  render: function () {
+export default class FuncParam extends React.Component {
+  render() {
     var name = this.props.name,
       def = this.props.def;
 
@@ -25,8 +25,9 @@ var FuncParam = React.createClass({
       </div>
 
     )
-  },
-  renderKeys: function () {
+  }
+
+  renderKeys() {
     var keys = this.props.def.keys;
     var keyNames = Object.keys(keys);
     return keyNames.map(function (keyName) {
@@ -40,10 +41,11 @@ var FuncParam = React.createClass({
         </div>
       )
     });
-  },
-  componentDidMount: function () {
-    var $a = $(this.refs['a'].getDOMNode());
-    var $content = $(this.refs['tooltipContents'].getDOMNode()).clone();
+  }
+
+  componentDidMount() {
+    var $a = $(React.findDOMNode(this.refs['a']));
+    var $content = $(React.findDOMNode(this.refs['tooltipContents'])).clone();
     $content.css('display', 'block');
 
     $a.tooltipster({
@@ -53,6 +55,6 @@ var FuncParam = React.createClass({
     });
 
   }
-});
+}
 
 module.exports = FuncParam;

@@ -1,11 +1,8 @@
-var React = require('react'),
-  ReactBootstrap = require('react-bootstrap'),
-  Panel = ReactBootstrap.Panel,
-  Row = ReactBootstrap.Row,
-  Col = ReactBootstrap.Col;
+import React from 'react';
+import ReactBootstrap, {Panel, Row, Col} from 'react-bootstrap';
 
-var queue = require('./queue'),
-  FuncLog = require('./FuncLog');
+import queue from './queue';
+import FuncLog from './FuncLog';
 
 
 var REGEX_DONE = /\t* *done\(\)( *);?/g,
@@ -13,19 +10,23 @@ var REGEX_DONE = /\t* *done\(\)( *);?/g,
   REGEX_CONSOLE_LOG = /console.log\([A-Za-z0-9 +-\\']*\)/g;
 
 
-var FuncExample = React.createClass({
-  componentDidMount: function () {
-    var code = this.props.example.code;
-    this.execute(code);
-  },
-  getInitialState: function () {
-    return {
+export default class FuncExample extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = {
       logs: [],
       numberedLogs: {},
       lineNumbers: true
     }
-  },
-  parseCode: function (code) {
+  }
+
+  componentDidMount() {
+    var code = this.props.example.code;
+    this.execute(code);
+  }
+
+
+  parseCode(code) {
 
     var raw = code.toString(),
       split = raw
@@ -110,7 +111,8 @@ var FuncExample = React.createClass({
     }
 
     return elements;
-  },
+  }
+
   /**
    * HACK: This is a disgusting, filthy hack to get hold of the line number in the code
    * block from which the console.log originated. This allows us to then patch tooltips
@@ -119,7 +121,7 @@ var FuncExample = React.createClass({
    * we fall back to display sequential log display, much like javascript dev console.
    * @returns {*}
    */
-  getLineNumber: function () {
+  getLineNumber() {
     var data = printStackTrace();
     console.info('data', data);
     for (var i = 0; i < data.length; i++) {
@@ -131,8 +133,9 @@ var FuncExample = React.createClass({
         return parseInt(split[split.length - 2]);
       }
     }
-  },
-  execute: function (code) {
+  }
+
+  execute(code) {
     queue.push(function (done) {
       var logs = [];
       var numberedLogs = {};
@@ -174,8 +177,9 @@ var FuncExample = React.createClass({
       }
     }.bind(this));
 
-  },
-  render: function () {
+  }
+
+  render() {
     var example = this.props.example,
       code = example.code || '';
 
@@ -216,8 +220,9 @@ var FuncExample = React.createClass({
 
       </div>
     )
-  },
-  componentWillReceiveProps: function (nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     if (nextProps.example != this.props.example) {
       this.setState({
         logs: [],
@@ -229,7 +234,4 @@ var FuncExample = React.createClass({
       }.bind(this));
     }
   }
-});
-
-
-module.exports = FuncExample;
+}

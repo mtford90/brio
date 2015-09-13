@@ -1,7 +1,7 @@
-var React = require('react');
+import React from 'react';
 
-var FuncDesc = React.createClass({
-  render: function () {
+export default class FuncDesc extends React.Component {
+  render() {
     var desc = this.props.description;
     return (
       <p className="func-desc">
@@ -9,6 +9,4 @@ var FuncDesc = React.createClass({
       </p>
     );
   }
-});
-
-module.exports = FuncDesc;
+}

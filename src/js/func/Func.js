@@ -4,7 +4,7 @@ import FuncDef from './FuncDef';
 import FuncDesc from './FuncDesc';
 import FuncExample from './FuncExample';
 
-export default class Func {
+export default class Func extends React.Component {
   render() {
     var {
       name='',
