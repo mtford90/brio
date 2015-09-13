@@ -1,14 +1,11 @@
-var React = require('react');
+import React from 'react';
 
-
-var Markdown = React.createClass({
-  render: function () {
+export default class Markdown {
+  render() {
     return (
       <div className="markdown">
         {this.props.children}
       </div>
     );
   }
-});
-
-module.exports = Markdown;
+}
