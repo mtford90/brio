@@ -21,11 +21,10 @@ export default class Func extends React.Component {
 
         <Accordion className="func-examples">
           {examples.map(function (example, idx) {
-            var header = <span>Example #{idx + 1}: {example.name}</span>;
+            var header = <span>Example #{idx + 1} {example.name ? ': ' + example.name : ''}</span>;
             return (
               <Panel header={header} eventKey={idx}>
                 <FuncExample example={example}
-                             func={func}
                              highlight={this.props.highlight}
                              idx={idx}
                              key={idx}/>

@@ -2,27 +2,39 @@ import React from 'react';
 import {Brio, Page, HomePage, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
 
 class FuncExample extends React.Component {
-  render () {
+  render() {
     var def = function (blah) {
         console.log('yo!', blah);
       },
       name = 'foo',
       params = {
         blah: {
-          optional: true
+          optional: true,
+          type: 'bool'
         }
       },
       description = 'Does something';
 
+    var examples = [
+      {
+        code: () => {
+          console.log('poop');
+        },
+        name: 'Logs 1',
+        description: 'Logs 1'
+      }
+    ];
+
     return <Func name={name}
                  def={def}
+                 examples={examples}
                  params={params}
                  description={description}/>
   }
 }
 
 class Docs extends React.Component {
-  render () {
+  render() {
     return (
       <Brio>
         <Header/>
@@ -30,6 +42,7 @@ class Docs extends React.Component {
         <Content>
           <HomePage>
             <h1>Brio Example</h1>
+
             <p>Welcome to the example Brio documentation. Choose a page to get started</p>
           </HomePage>
           <Page name='Documentation'>

@@ -13,7 +13,7 @@ var REGEX_DONE = /\t* *done\(\)( *);?/g,
 export default class FuncExample extends React.Component {
   constructor(props) {
     super(props);
-    this.props = {
+    this.state = {
       logs: [],
       numberedLogs: {},
       lineNumbers: true
@@ -29,9 +29,7 @@ export default class FuncExample extends React.Component {
   parseCode(code) {
 
     var raw = code.toString(),
-      split = raw
-        .replace(REGEX_DONE, '')
-        .split('\n'),
+      split = raw.replace(REGEX_DONE, '').split('\n'),
       numberedLogs = this.state.numberedLogs;
 
 
@@ -48,9 +46,6 @@ export default class FuncExample extends React.Component {
         firstLine = split[firstLineIdx];
       }
 
-
-      console.log('firstLine', firstLine);
-
       for (i = 0; i < firstLine.length; i++) {
         var char = firstLine[i];
         console.log('char', '$' + char + '$');
@@ -61,7 +56,6 @@ export default class FuncExample extends React.Component {
           break;
         }
       }
-
 
       for (var i = 0; i < split.length; i++) {
         var lineNum = i + 1;
@@ -139,7 +133,7 @@ export default class FuncExample extends React.Component {
     queue.push(function (done) {
       var logs = [];
       var numberedLogs = {};
-      var oldConsoleLog = window.console.log;
+      var oldConsoleLog = window.console.log.bind(window.console);
       window.console.log = function () {
         var args = [];
         for (var i = 0; i < arguments.length; i++) {
@@ -152,25 +146,41 @@ export default class FuncExample extends React.Component {
             numberedLogs[n] = [];
           }
           numberedLogs[n].push(args);
+
         }
         else if (n === undefined) {
           this.setState({
             lineNumbers: false
           })
         }
+
       }.bind(this);
       var fn;
       eval('fn = ' + code);
       try {
         //noinspection JSUnusedAssignment
-        fn(function () {
+        if (fn.length) {
+          //noinspection JSUnusedAssignment
+          fn(() => {
+            window.console.log = oldConsoleLog;
+            this.setState({
+              logs: logs,
+              numberedLogs: numberedLogs
+            });
+            done();
+          });
+        }
+        else {
+          //noinspection JSUnusedAssignment
+          fn();
           window.console.log = oldConsoleLog;
           this.setState({
             logs: logs,
             numberedLogs: numberedLogs
           });
           done();
-        }.bind(this));
+        }
+
       }
       catch (e) {
         console.error(e);
@@ -184,6 +194,10 @@ export default class FuncExample extends React.Component {
       code = example.code || '';
 
     var parsedCode = this.parseCode(code);
+
+    var logs = this.state.logs;
+
+    console.log('logs', logs);
 
     return (
       <div className="func-example"
@@ -211,7 +225,7 @@ export default class FuncExample extends React.Component {
             <pre className="code"><code className="lang-js">{parsedCode}</code></pre>
           </Col>
           <Col md="3" className="logs">
-            <pre>{this.state.logs.map(function (l) {
+            <pre>{logs.map(function (l) {
               return l + '\n';
             })}</pre>
           </Col>
