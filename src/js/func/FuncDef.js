@@ -1,9 +1,8 @@
-var React = require('react');
+import React from 'react';
+import FuncParam from 'FuncParam';
 
-var FuncParam = require('./FuncParam');
-
-var FuncDef = React.createClass({
-  render: function () {
+export default class FuncDef {
+  render() {
     var {
         name,
         params
@@ -28,6 +27,4 @@ var FuncDef = React.createClass({
       </h3>
     )
   }
-});
-
-module.exports = FuncDef;
+}
