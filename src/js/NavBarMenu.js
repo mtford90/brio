@@ -22,10 +22,20 @@ export default class NavBarMenu extends React.Component {
             isSelected = window.location.hash.startsWith('#' + path),
             className = isSelected ? 'active' : '';
 
-          return <li><a data-path={path} onClick={this.onClick} className={className}>{name}</a></li>
+          return (
+            <li>
+              <a data-path={path}
+                 data-name={name}
+                 data-selected={isSelected}
+                 onClick={this.onClick}
+                 className={className}>
+                {name}
+              </a>
+            </li>
+          );
         }.bind(this))};
       </ul>
-    )
+    );
   }
 
   componentDidMount() {
