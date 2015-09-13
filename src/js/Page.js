@@ -14,6 +14,7 @@ export default class Page extends React.Component {
     return (
       <div className="page"
            data-name={name}
+           data-path={path}
            data-selected={isSelected}
            style={style}>
         {this.props.children}

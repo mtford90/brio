@@ -35,11 +35,10 @@ var Section = React.createClass({
     var $node = $(this.getDOMNode());
     var path = '/' + this.props.name;
     while ($node.length) {
-      $node = $node.parents('.section');
+      $node = $node.parents('.section,.page');
       var name = $node.attr('data-name');
-      if ($node.length) {
-        path = '/' + name + path;
-      }
+      if ($node.length)  path = '/' + name + path;
+
     }
     $(this.getDOMNode()).attr('data-path', path);
     this.setState({

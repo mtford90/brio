@@ -75,7 +75,7 @@ export default class Brio extends React.Component {
 
     console.log('$selectedPage', $selectedPage);
 
-    return this._constructMenuData({}, $section, '');
+    return this._constructMenuData({}, $section, $selectedPage.attr('data-path'));
   }
 
 
