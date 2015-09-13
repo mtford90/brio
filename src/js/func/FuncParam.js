@@ -56,5 +56,3 @@ export default class FuncParam extends React.Component {
 
   }
 }
-
-module.exports = FuncParam;

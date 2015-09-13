@@ -1,5 +1,5 @@
 import React from 'react';
-import FuncParam from 'FuncParam';
+import FuncParam from './FuncParam';
 
 export default class FuncDef extends React.Component {
   render() {
