@@ -1,14 +1,11 @@
-var React = require('react'),
-  ReactBootstrap = require('react-bootstrap'),
-  Accordion = ReactBootstrap.Accordion,
-  Panel = ReactBootstrap.Panel;
+import React from 'react';
+import ReactBootstrap, {Accordion, Panel} from 'react-bootstrap';
+import FuncDef from './FuncDef';
+import FuncDesc from './FuncDesc';
+import FuncExample from './FuncExample';
 
-var FuncDef = require('./FuncDef'),
-  FuncDesc = require('./FuncDesc'),
-  FuncExample = require('./FuncExample');
-
-var Func = React.createClass({
-  render: function () {
+export default class Func {
+  render() {
     var {
       name='',
       def,
@@ -39,6 +36,4 @@ var Func = React.createClass({
       </div>
     )
   }
-});
-
-module.exports = Func;
+}
