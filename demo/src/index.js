@@ -1,5 +1,5 @@
 import React from 'react';
-import {Brio, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
+import {Brio, Page, SideMenu, Header, Content, Func, Section, Markdown} from 'brio';
 
 var FuncExample = React.createClass({
   render: function () {
@@ -28,30 +28,34 @@ var SiestaDocumentation = React.createClass({
         <Header/>
         <SideMenu/>
         <Content>
+          <Page name='Documentation'>
+            <Section name='Something'>
+              <Section name='Something Else'>
+                <h1>A title</h1>
 
-          <Section name='Something'>
-            <Section name='Something Else'>
-              <h1>A title</h1>
+                <p>This section is about something</p>
 
-              <p>This section is about something</p>
+                <Markdown/>
+                <FuncExample/>
+              </Section>
+              <Section name='Something Else Again'>
+                <h1>ABC</h1>
 
+                <p>123</p>
+
+                <FuncExample/>
+              </Section>
+            </Section>
+            <Section name='Another Thang'>
+              <h1>Another Title</h1>
+
+              <p>This section is also about something...</p>
               <Markdown/>
-              <FuncExample/>
             </Section>
-            <Section name='Something Else Again'>
-              <h1>ABC</h1>
+          </Page>
+          <Page name='Guide'>
 
-              <p>123</p>
-
-              <FuncExample/>
-            </Section>
-          </Section>
-          <Section name='Another Thang'>
-            <h1>Another Title</h1>
-
-            <p>This section is also about something...</p>
-            <Markdown/>
-          </Section>
+          </Page>
         </Content>
       </Brio>
     )

@@ -8,7 +8,7 @@ export default class Page extends React.Component {
 
   render() {
     return (
-      <div className="page">
+      <div className="page" data-name={this.props.name}>
       </div>
     )
   }

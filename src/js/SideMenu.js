@@ -26,10 +26,8 @@ export default class SideMenu extends React.Component {
     return (
       <ul>
         {Object.keys(menu).map(function (name) {
-          var section = menu[name];
-          var selected = location.pathSelectedExactly(section.path);
-          console.log('name', name);
-          console.log('section.sections', section.sections);
+          var section = menu[name],
+            selected = location.pathSelectedExactly(section.path);
           return (
             <li>
               {selected ? {name} : <a data-name={name} data-path={section.path} onClick={this.onClick}>{name}</a>}

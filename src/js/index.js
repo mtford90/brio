@@ -5,9 +5,9 @@ import Func from './Func';
 import Section from './Section';
 import Markdown from './Markdown';
 import Header from './Header';
+import Page from './Page';
 
 
-
-export {Brio, SideMenu, Content, Markdown, Section, Header, Func};
+export {Brio, Page, SideMenu, Content, Markdown, Section, Header, Func};
 
 window.brio = exports;
